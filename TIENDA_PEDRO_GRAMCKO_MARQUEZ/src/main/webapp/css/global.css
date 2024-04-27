@@ -1,0 +1,39 @@
+@font-face{
+	font-family: "roboto";
+	src: url("font/Roboto-Medium.ttf");
+}
+
+@font-face{
+	font-family: "robotoBlack";
+	src: url("font/Roboto-Black.ttf");
+}
+
+@font-face{
+	font-family: "titulo";
+	src: url("font/PatrickHand-Regular.ttf");
+}
+
+*{
+	--default: #0abf8a;
+	--active: #04503f;
+	--hover: #009f73;
+	--gLight: #84f5c6;
+	--gDark: #012d25;
+	
+	font-family: "roboto";
+
+}
+
+body{
+	background-color: white !important;
+}
+
+.btn-primary{
+	background-color: var(--default) !important;
+	border: none !important;
+}
+
+.btn-primary:hover{
+	background-color: var(--hover) !important;
+	font-weight: 600;
+}
