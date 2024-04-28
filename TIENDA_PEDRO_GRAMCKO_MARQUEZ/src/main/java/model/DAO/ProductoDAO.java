@@ -35,6 +35,7 @@ public class ProductoDAO {
 				producto.setStock(rs.getInt("stock"));
 				producto.setImpuesto(rs.getFloat("impuesto"));
 				producto.setImagen(rs.getString("imagen"));
+				producto.setActivo(rs.getBoolean("activo"));
 
 				lista.add(producto);
 			}
@@ -271,14 +272,16 @@ public class ProductoDAO {
 		return productos;
 	}
 
-	public static void altaProducto(ProductoVO producto) {
+	public static boolean altaProducto(ProductoVO producto) {
 		Connection con = null;
 		PreparedStatement ps = null;
+		boolean productoAgregadoCorrectamente = false;
 
 		try {
 			con = Conexion.getConexion();
 			ps = con.prepareStatement("INSERT INTO productos ( id_categoria, nombre, descripcion, precio, stock,"
 					+ "fecha_alta, fecha_baja, impuesto, imagen) VALUES (?,?,?,?,?,?,?,?,?)");
+			
 
 
 			ps.setInt(1, producto.getId_categoria());
@@ -291,12 +294,17 @@ public class ProductoDAO {
 			ps.setFloat(8, producto.getImpuesto());
 			ps.setString(9, producto.getImagen());
 
-			ps.executeUpdate();
+			int filasAfectadas = ps.executeUpdate();
+		       if (filasAfectadas > 0) {
+		            productoAgregadoCorrectamente = true;
+		            System.out.println("Producto agregado correctamente");
+		        }
 			System.out.println("Producto agregado correctamente");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return productoAgregadoCorrectamente;
 	}
 	
 	public static boolean actualizaProducto(ProductoVO producto) {

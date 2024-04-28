@@ -5,8 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-
+import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import conexion.Conexion;
 import model.VO.ProductoVO;
@@ -49,11 +51,41 @@ public class UsuarioDAO {
 	    } catch (SQLException e) {
 	        e.printStackTrace(); // Manejar la excepción según sea necesario
 	        return false; // El registro falló debido a una excepción
-	    } finally {
-	        // Cerrar la conexión y el statement
-	        // Aquí deberías cerrar la conexión y el statement correctamente
-	        // para liberar recursos
 	    }
+	}
+	
+	public static List<UsuarioVO> findAll() {
+
+		List<UsuarioVO> lista = new ArrayList<UsuarioVO>();
+
+
+		try (Connection con = Conexion.getConexion();
+			     PreparedStatement st = con.prepareStatement("SELECT * FROM usuarios");
+			     ResultSet rs = st.executeQuery()) {
+
+			    while (rs.next()) {
+			        UsuarioVO usuario = new UsuarioVO();
+
+			        usuario.setId(rs.getInt("id"));
+			        usuario.setId_rol(rs.getInt("id_rol"));
+			        usuario.setEmail(rs.getString("email"));
+			        usuario.setNombre(rs.getString("nombre"));
+			        usuario.setApellido1(rs.getString("apellido1"));
+			        usuario.setApellido2(rs.getString("apellido2"));
+			        usuario.setDireccion(rs.getString("direccion"));
+			        usuario.setProvincia(rs.getString("provincia"));
+			        usuario.setLocalidad(rs.getString("localidad"));
+			        usuario.setTelefono(rs.getString("telefono"));
+			        usuario.setDni(rs.getString("dni"));
+			        usuario.setActivo(rs.getBoolean("activo"));
+
+			        lista.add(usuario);
+			    }
+			} catch (SQLException e) {
+			    e.printStackTrace();
+			}
+			return lista;
+
 	}
 
 	
@@ -176,16 +208,6 @@ public class UsuarioDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			// Manejar la excepción según tus necesidades
-		} finally {
-			// Cerrar conexiones y liberar recursos
-			try {
-				if (rs != null)
-					rs.close();
-				if (stmt != null)
-					stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 
 		return true;
@@ -213,6 +235,53 @@ public class UsuarioDAO {
 	    
 	    return true;
 	}
+	
+	public static boolean actualizaUsuario(UsuarioVO usuario) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    boolean exito = false;
+
+	    try {
+	        con = Conexion.getConexion();
+	        ps = con.prepareStatement("UPDATE usuarios \r\n"
+	                + "SET id_rol = ?, \r\n"
+	                + "    email = ?, \r\n"
+	                + "    clave = ?, \r\n"
+	                + "    nombre = ?, \r\n"
+	                + "    apellido1 = ?, \r\n"
+	                + "    apellido2 = ?, \r\n"
+	                + "    direccion = ?, \r\n"
+	                + "    provincia = ?, \r\n"
+	                + "    localidad = ?, \r\n"
+	                + "    telefono = ?, \r\n"
+	                + "    dni = ?, \r\n"
+	                + "    activo = ? \r\n"
+	                + "WHERE id = ?");
+	        ps.setInt(1, usuario.getId_rol()); // id_rol
+	        ps.setString(2, usuario.getEmail()); // email
+	        ps.setString(3, usuario.getClave()); // clave
+	        ps.setString(4, usuario.getNombre()); // nombre
+	        ps.setString(5, usuario.getApellido1()); // apellido1
+	        ps.setString(6, usuario.getApellido2()); // apellido2
+	        ps.setString(7, usuario.getDireccion()); // direccion
+	        ps.setString(8, usuario.getProvincia()); // provincia
+	        ps.setString(9, usuario.getLocalidad()); // localidad
+	        ps.setString(10, usuario.getTelefono()); // telefono
+	        ps.setString(11, usuario.getDni()); // dni
+	        ps.setBoolean(12, usuario.isActivo()); // activo
+	        ps.setInt(13, usuario.getId()); // id
+	        int filas = ps.executeUpdate();
+
+	        if (filas > 0) {
+	            exito = true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return exito;
+	}
+
 	
 	public static boolean bajaUsuario(UsuarioVO usuario) {
 		Connection con = null;

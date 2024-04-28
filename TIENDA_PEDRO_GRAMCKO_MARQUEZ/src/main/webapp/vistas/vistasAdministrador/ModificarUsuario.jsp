@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="model.VO.*, java.util.List" %>
+<%@ page import="model.VO.*, java.util.List, java.sql.Date" %> <!-- Importa la clase ProductoVO -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
+        <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Charts - SB Admin</title>
-        <link href="vistas\vistasAdministrador\indexEmpleado\css\styles.css" rel="stylesheet" />
+        <link href="vistas/vistasAdministrador/indexEmpleado/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
@@ -112,64 +112,185 @@
             
             
 <main style="margin: 50px;">
-
-<div id="mensaje">
-    <% 
-    String mensaje = (String) request.getAttribute("mensaje");
-    if (mensaje != null) { 
-    %>
-    <div class="alert alert-success" role="alert">
-        <%= mensaje %>
+    <h1 class="display-4">Lista de Usuarios</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>ID Rol</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+            	UsuarioVO user = (UsuarioVO) request.getSession().getAttribute("usuario");
+                List<UsuarioVO> listaUsuarios = (List<UsuarioVO>) request.getAttribute("listaUsuarios"); 
+                for (UsuarioVO usuario: listaUsuarios) {      
+                	
+                    
+                	user = (UsuarioVO) request.getSession().getAttribute("usuario");
+                    int rolUsuario = user.getId_rol();
+                %>
+				<tr>
+				    <td><%= usuario.getId() %></td>
+				    <td><%= usuario.getId_rol() %></td>
+				    <td><%= usuario.getEmail() %></td>
+				    <td>
+				        <% if(rolUsuario == 2 || rolUsuario == 3) { %>
+				            <a href="#" class="actualizar-usuario"
+				               data-id="<%= usuario.getId() %>"
+				               data-id_rol="<%= usuario.getId_rol() %>"
+				               data-email="<%= usuario.getEmail() %>"
+				               data-nombre="<%= usuario.getNombre() %>"
+				               data-apellido1="<%= usuario.getApellido1() %>"
+				               data-apellido2="<%= usuario.getApellido2() %>"
+				               data-direccion="<%= usuario.getDireccion() %>"
+				               data-provincia="<%= usuario.getProvincia()%>"
+				               data-localidad="<%= usuario.getLocalidad() %>"
+				               data-telefono="<%= usuario.getTelefono()%>"
+				               data-dni="<%= usuario.getDni() %>"
+				               data-activo="<%= usuario.isActivo() %>">Actualizar</a>
+				               			               
+				        <% } %>
+				    </td>
+				</tr>
+                <% } %>
+            </tbody>
+        </table>
     </div>
-    <% } %>
-</div>
-	
-	<div id="formulario-actualizacion" style="padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
-    <h2>Dar de alta un producto</h2>
-    <form action="AltaProducto" method="post">
-        <input type="hidden" id="idProducto" name="idProducto">
-        <div class="form-group">
-            <label for="idCategoria">ID de Categoría:</label>
-            <input type="number" class="form-control" id="id_categoria" name="id_categoria">
+    
+<!-- Formulario de Actualización (oculto por defecto) -->
+<div id="formulario-actualizacion" style="display: none; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+    <div id="mensaje">
+        <% 
+        String mensaje = request.getParameter("mensaje");
+        if (mensaje != null && !mensaje.isEmpty()) { 
+        %>
+        <div class="alert alert-success" role="alert">
+            <%= mensaje %>
         </div>
-        <div class="form-group">
+        <% } %>
+    </div>
+    <h2 style="margin-bottom: 20px;">Actualizar Producto</h2>
+    <form action="ModificarUsuario" method="post">
+        <div style="margin-bottom: 10px;">
+        <input  type="hidden" id="idUsuario" name="idUsuario">
+            <label for="id_rol">ID Rol:</label>
+            <input type="text" id="id_rol" name="id_rol" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
             <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre">
+            <input type="text" id="nombre" name="nombre" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="descripcion">Descripción:</label>
-            <input type="text" class="form-control" id="descripcion" name="descripcion">
+        <div style="margin-bottom: 10px;">
+            <label for="apellido1">Primer apellido:</label>
+            <input type="text" id="apellido1" name="apellido1" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="precio">Precio:</label>
-            <input type="number" class="form-control" id="precio" name="precio">
+        <div style="margin-bottom: 10px;">
+            <label for="apellido2">Segundo apellido:</label>
+            <input type="text" id="apellido2" name="apellido2" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="stock">Stock:</label>
-            <input type="number" class="form-control" id="stock" name="stock">
+		<div style="margin-bottom: 10px;">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="impuesto">Impuesto:</label>
-            <input type="number" class="form-control" id="impuesto" name="impuesto">
+        <div style="margin-bottom: 10px;">
+            <label for="provincia">Provincia:</label>
+            <input type="text" id="provincia" name="provincia" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="imagen">Imagen:</label>
-            <input type="text" class="form-control" id="imagen" name="imagen">
+        <div style="margin-bottom: 10px;">
+            <label for="localidad">Localidad:</label>
+            <input type="text" id="localidad" name="localidad" class="form-control">
         </div>
+        <div style="margin-bottom: 10px;">
+            <label for="telefono">Telefono:</label>
+            <input type="number" id="telefono" name="telefono" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" name="dni" class="form-control">
+        </div>
+        
+        <%
+        // Aquí se comprueba el rol del usuario
+        UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
+        int rolUsuario = usuario.getId_rol();
+        if(rolUsuario == 3){ %>
+            <div style="margin-bottom: 10px;">
+            <label for="activo">Activo:</label>
+            <input type="checkbox" id="activo" name="activo" class="form-check-input">
+        </div>
+        <% } %>
+				            	   
+
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>
-	
+
+
+
+
 </main>
 
 
 
             </div>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="vistas/vistasAdministrador/indexEmpleado/js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        
+<script>
+$(document).ready(function() {
+    $('.actualizar-usuario').on('click', function(e) {
+        e.preventDefault();
+        var idUsuario = $(this).data('id');
+        
+        // Obtener los datos del producto del atributo de datos personalizados
+        var id_rol = $(this).data('id_rol');
+        var email = $(this).data('email');
+        var nombre = $(this).data('nombre');
+        var apellido1 = $(this).data('apellido1');
+        var apellido2 = $(this).data('apellido2');
+        var direccion = $(this).data('direccion');
+        var provincia = $(this).data('provincia');
+        var localidad = $(this).data('localidad');
+        var telefono = $(this).data('telefono');
+        var dni = $(this).data('dni');
+        var activo = $(this).data('activo');
+        
+        // Rellenar el formulario con los datos del producto
+        $('#idUsuario').val(idUsuario);
+        $('#id_rol').val(id_rol);
+        $('#email').val(email);
+        $('#nombre').val(nombre);
+        $('#apellido1').val(apellido1);
+        $('#apellido2').val(apellido2);
+        $('#direccion').val(direccion);
+        $('#provincia').val(provincia);
+        $('#localidad').val(localidad);
+        $('#telefono').val(telefono);
+        $('#dni').val(dni);
+        $('#activo').prop('checked', activo);
+        
+
+        
+        // Mostrar el formulario
+        $('#formulario-actualizacion').show();
+    });
+});
+</script>
+
+
+
     </body>
 </html>
 

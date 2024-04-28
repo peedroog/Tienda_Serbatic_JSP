@@ -57,10 +57,17 @@ public class AltaProducto extends HttpServlet {
 	        producto.setImagen(imagen);
 
 	        // Llamar al servicio para agregar el producto a la base de datos
-	        ProductoService.altaProducto(producto);
+	        boolean resultado = ProductoService.altaProducto(producto);
 
-	        // Puedes redirigir a una página de éxito o mostrar un mensaje aquí
-	        response.getWriter().write("Producto agregado correctamente");
+	        if (resultado) {
+	            // Producto añadido correctamente
+	            request.setAttribute("mensaje", "El producto se ha añadido correctamente.");
+	        }else {
+	            // Error al añadir el producto
+	            request.setAttribute("mensaje", "Hubo un error al añadir el producto.");
+	        }
+	        request.getRequestDispatcher("vistas/vistasAdministrador/AltaProducto.jsp").forward(request, response);
+	        
 	    }
 
 }

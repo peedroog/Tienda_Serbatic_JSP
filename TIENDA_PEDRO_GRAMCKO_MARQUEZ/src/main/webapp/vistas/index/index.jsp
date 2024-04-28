@@ -102,7 +102,11 @@
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         
         for (ProductoVO producto : catalogo) {
-            CategoriaVO categoria = CategoriaService.findById(producto.getId_categoria());
+        	
+        	if(producto.isActivo()){
+        		CategoriaVO categoria = CategoriaService.findById(producto.getId_categoria());
+        	
+            
         %>
         <div class="col-12 col-md-4">
 				<div class="product-card"
@@ -181,7 +185,8 @@
 				</div>
 			</div>
         
-        <% } %>
+        <% }
+        }%>
     </div>
 
 <nav aria-label="Page navigation">

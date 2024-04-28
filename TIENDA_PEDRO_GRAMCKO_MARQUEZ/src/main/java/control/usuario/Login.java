@@ -81,11 +81,11 @@ public class Login extends HttpServlet {
 		                break;
 		            case 2:
 		                // Redirigir al usuario con rol 2 a una página específica
-		                response.sendRedirect(request.getContextPath() + "/EntradaAdministrador");
+		                response.sendRedirect(request.getContextPath() + "/Admin");
 		                break;
 		            case 3:
 		                // Redirigir al usuario con rol 3 a una página específica
-		                response.sendRedirect(request.getContextPath() + "/EntradaAdministrador");
+		                response.sendRedirect(request.getContextPath() + "/Admin");
 		                break;
 		            default:
 		                // Redirigir al usuario a una página por defecto en caso de que su rol no esté definido

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
@@ -34,6 +35,14 @@ public class UsuarioService {
 	        // Si no se encuentra ningún usuario con el correo electrónico proporcionado, devolver null
 	        return null;
 	    }
+	}
+	
+	public static List<UsuarioVO> findAll(){
+		return UsuarioDAO.findAll();
+	}
+	
+	public static boolean registrarUsuario(UsuarioVO usuario) {
+		return UsuarioDAO.registrarUsuario(usuario);
 	}
 
 	
@@ -72,7 +81,13 @@ public class UsuarioService {
 		
 	}
 	
+	public static boolean actualizaUsuario(UsuarioVO usuario) {
+		return UsuarioDAO.actualizaUsuario(usuario);
+	}
+	
 	public static boolean bajaUsuario(UsuarioVO usuario) {
 		return UsuarioDAO.bajaUsuario(usuario);
 	}
+	
+
 }

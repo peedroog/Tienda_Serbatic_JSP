@@ -54,8 +54,8 @@ public class ProductoService {
 		return ProductoDAO.productosPorCategoria(id);
 	}
 	
-	public static void altaProducto(ProductoVO producto) {
-		ProductoDAO.altaProducto(producto);
+	public static boolean altaProducto(ProductoVO producto) {
+		return ProductoDAO.altaProducto(producto);
 	}
 	
 	public static boolean modificarProducto(ProductoVO producto) {

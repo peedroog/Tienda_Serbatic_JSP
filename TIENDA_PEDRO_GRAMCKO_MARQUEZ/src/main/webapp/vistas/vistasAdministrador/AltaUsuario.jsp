@@ -125,39 +125,56 @@
 </div>
 	
 	<div id="formulario-actualizacion" style="padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
-    <h2>Dar de alta un producto</h2>
-    <form action="AltaProducto" method="post">
-        <input type="hidden" id="idProducto" name="idProducto">
-        <div class="form-group">
-            <label for="idCategoria">ID de Categoría:</label>
-            <input type="number" class="form-control" id="id_categoria" name="id_categoria">
-        </div>
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre">
-        </div>
-        <div class="form-group">
-            <label for="descripcion">Descripción:</label>
-            <input type="text" class="form-control" id="descripcion" name="descripcion">
-        </div>
-        <div class="form-group">
-            <label for="precio">Precio:</label>
-            <input type="number" class="form-control" id="precio" name="precio">
-        </div>
-        <div class="form-group">
-            <label for="stock">Stock:</label>
-            <input type="number" class="form-control" id="stock" name="stock">
-        </div>
-        <div class="form-group">
-            <label for="impuesto">Impuesto:</label>
-            <input type="number" class="form-control" id="impuesto" name="impuesto">
-        </div>
-        <div class="form-group">
-            <label for="imagen">Imagen:</label>
-            <input type="text" class="form-control" id="imagen" name="imagen">
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
+    <h2>Dar de alta un usuario</h2>
+<form action="AltaUsuario" method="post">
+    <input type="hidden" id="idUsuario" name="idUsuario">
+    <div class="form-group">
+        <label for="idRol">ID de Rol:</label>
+        <input type="number" class="form-control" id="idRol" name="idRol">
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email">
+    </div>
+    <div class="form-group">
+        <label for="clave">Clave:</label>
+        <input type="password" class="form-control" id="clave" name="clave">
+    </div>
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" class="form-control" id="nombre" name="nombre">
+    </div>
+    <div class="form-group">
+        <label for="apellido1">Apellido 1:</label>
+        <input type="text" class="form-control" id="apellido1" name="apellido1">
+    </div>
+    <div class="form-group">
+        <label for="apellido2">Apellido 2:</label>
+        <input type="text" class="form-control" id="apellido2" name="apellido2">
+    </div>
+    <div class="form-group">
+        <label for="direccion">Dirección:</label>
+        <input type="text" class="form-control" id="direccion" name="direccion">
+    </div>
+    <div class="form-group">
+        <label for="provincia">Provincia:</label>
+        <input type="text" class="form-control" id="provincia" name="provincia">
+    </div>
+    <div class="form-group">
+        <label for="localidad">Localidad:</label>
+        <input type="text" class="form-control" id="localidad" name="localidad">
+    </div>
+    <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" class="form-control" id="telefono" name="telefono">
+    </div>
+    <div class="form-group">
+        <label for="dni">DNI:</label>
+        <input type="text" class="form-control" id="dni" name="dni">
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
 </div>
 	
 </main>

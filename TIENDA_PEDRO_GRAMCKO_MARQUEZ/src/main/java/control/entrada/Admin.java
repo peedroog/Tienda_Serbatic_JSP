@@ -10,14 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class EntradaAdministrador
  */
-@WebServlet("/EntradaAdministrador")
-public class EntradaAdministrador extends HttpServlet {
+@WebServlet("/Admin")
+public class Admin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EntradaAdministrador() {
+    public Admin() {
         super();
         // TODO Auto-generated constructor stub
     }

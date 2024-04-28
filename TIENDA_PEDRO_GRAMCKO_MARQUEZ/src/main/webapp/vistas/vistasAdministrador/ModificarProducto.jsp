@@ -1,10 +1,9 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ page import="model.VO.*, java.util.List, java.sql.Date" %> <!-- Importa la clase ProductoVO -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8" />
+        <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -120,78 +119,103 @@
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
-                    <th>Precio</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <% 
                 List<ProductoVO> listaProductos = (List<ProductoVO>) request.getAttribute("listaProductos"); 
-                for (ProductoVO producto : listaProductos) { 
-                    int id = producto.getId();
-                    int idCategoria = producto.getId_categoria();
-                    String nombre = producto.getNombre(); 
-                    String descripcion = producto.getDescripcion();
-                    double precio = producto.getPrecio();                    
-                    int stock = producto.getStock();
-                    Date fecha_alta = producto.getFecha_alta();
-                    Date fecha_baja = producto.getFecha_baja();
-                    float impuesto = producto.getImpuesto();
-                    String imagen = producto.getImagen();
-                    boolean activo = producto.isActivo();
-                    
+                for (ProductoVO producto : listaProductos) {      
+                	
                     
                     // Aquí se comprueba el rol del usuario
                     UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
                     int rolUsuario = usuario.getId_rol();
                 %>
-                <tr>
-                    <td><%= id %></td>
-                    <td><%= nombre %></td>
-                    <td><%= precio %>€</td>
-					<!-- Enlace Actualizar con ID del producto como parámetro -->
-					<td>
-					    <% if(rolUsuario == 2 || rolUsuario == 3) { %>
-					        <a href="ModificarProducto?id=<%= id %>" class="actualizar-producto">Actualizar</a>
-					    <% } %>
-					    <% if(rolUsuario == 3) { %>
-					        <a href="borrarProducto?id=<%= id %>" class="btn btn-danger">Borrar</a>
-					    <% } %>
-					</td>
-                </tr>
+				<tr>
+				    <td><%= producto.getId() %></td>
+				    <td><%= producto.getNombre() %></td>
+				    <td>
+				        <% if(rolUsuario == 2 || rolUsuario == 3) { %>
+				            <a href="#" class="actualizar-producto"
+				               data-id="<%= producto.getId() %>"
+				               data-nombre="<%= producto.getNombre() %>"
+				               data-precio="<%= producto.getPrecio() %>"
+				               data-idCategoria="<%= producto.getId_categoria() %>"
+				               data-descripcion="<%= producto.getDescripcion() %>"
+				               data-stock="<%= producto.getStock() %>"
+				               data-impuesto="<%= producto.getImpuesto() %>"
+				               data-imagen="<%= producto.getImagen() %>"
+				               data-activo="<%= producto.isActivo() %>">Actualizar</a>
+				               			               
+				        <% } %>
+				    </td>
+				</tr>
                 <% } %>
             </tbody>
         </table>
     </div>
     
 <!-- Formulario de Actualización (oculto por defecto) -->
-<div id="formulario-actualizacion" style="display: none;">
-    <h2>Actualizar Producto</h2>
-    <form action="guardarProducto" method="post">
-        <input type="hidden" id="idProducto" name="idProducto">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre">
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio">
-        <label for="idCategoria">ID Categoría:</label>
-        <input type="text" id="idCategoria" name="idCategoria">
-        <label for="descripcion">Descripción:</label>
-        <input type="text" id="descripcion" name="descripcion">
-        <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock">
-        <label for="fechaAlta">Fecha de Alta:</label>
-        <input type="text" id="fechaAlta" name="fechaAlta">
-        <label for="fechaBaja">Fecha de Baja:</label>
-        <input type="text" id="fechaBaja" name="fechaBaja">
-        <label for="impuesto">Impuesto:</label>
-        <input type="number" id="impuesto" name="impuesto">
-        <label for="imagen">Imagen:</label>
-        <input type="text" id="imagen" name="imagen">
-        <label for="activo">Activo:</label>
-        <input type="checkbox" id="activo" name="activo">
+<div id="formulario-actualizacion" style="display: none; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+    <div id="mensaje">
+        <% 
+        String mensaje = request.getParameter("mensaje");
+        if (mensaje != null && !mensaje.isEmpty()) { 
+        %>
+        <div class="alert alert-success" role="alert">
+            <%= mensaje %>
+        </div>
+        <% } %>
+    </div>
+    <h2 style="margin-bottom: 20px;">Actualizar Producto</h2>
+    <form action="ModificarProducto" method="post">
+        <div style="margin-bottom: 10px;">
+        <input  type="hidden" id="idProducto" name="idProducto">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="precio">Precio:</label>
+            <input type="text" id="precio" name="precio" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="idCategoria">ID Categoría:</label>
+            <input type="text" id="idCategoria" name="idCategoria" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" class="form-control" rows="5"></textarea>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="impuesto">Impuesto:</label>
+            <input type="number" id="impuesto" name="impuesto" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="imagen">Imagen:</label>
+            <input type="text" id="imagen" name="imagen" class="form-control">
+        </div>
+        <%
+        // Aquí se comprueba el rol del usuario
+        UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
+        int rolUsuario = usuario.getId_rol();
+        if(rolUsuario == 3){ %>
+            <div style="margin-bottom: 10px;">
+            <label for="activo">Activo:</label>
+            <input type="checkbox" id="activo" name="activo" class="form-check-input">
+        </div>
+        <% } %>
+				            	   
+
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>
+
+
 
 
 </main>
@@ -205,24 +229,40 @@
     	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="vistas/vistasAdministrador/indexEmpleado/js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        
 <script>
-    $(document).ready(function() {
-        // Función para mostrar el formulario de actualización al hacer clic en el enlace
-        $('a.actualizar-producto').click(function(event) {
-            // Evitar el comportamiento predeterminado de los enlaces
-            event.preventDefault();
+$(document).ready(function() {
+    $('.actualizar-producto').on('click', function(e) {
+        e.preventDefault();
+        var idProducto = $(this).data('id');
+        
+        // Obtener los datos del producto del atributo de datos personalizados
+        var nombre = $(this).data('nombre');
+        var precio = $(this).data('precio');
+        var idCategoria = $(this).data('idcategoria');
+        var descripcion = $(this).data('descripcion');
+        var stock = $(this).data('stock');
+        var impuesto = $(this).data('impuesto');
+        var imagen = $(this).data('imagen');
+        var activo = $(this).data('activo');
+        
+        // Rellenar el formulario con los datos del producto
+        $('#idProducto').val(idProducto);
+        $('#nombre').val(nombre);
+        $('#precio').val(precio);
+        $('#idCategoria').val(idCategoria);
+        $('#descripcion').val(descripcion);
+        $('#stock').val(stock);
+        $('#impuesto').val(impuesto);
+        $('#imagen').val(imagen);
+        $('#activo').prop('checked', activo);
+        
 
-            // Obtener el ID del producto desde el atributo data
-            var idProducto = $(this).data('producto-id');
-
-            // Aquí puedes hacer una llamada AJAX para obtener los detalles del producto con el ID
-            // y luego llenar el formulario de actualización con esos detalles
-            // Por ahora, simplemente mostraremos el formulario de actualización vacío
-
-            // Mostrar el formulario de actualización
-            $('#formulario-actualizacion').show();
-        });
+        
+        // Mostrar el formulario
+        $('#formulario-actualizacion').show();
     });
+});
 </script>
 
 

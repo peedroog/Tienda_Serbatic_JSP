@@ -50,20 +50,39 @@
                                 Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Gestionar productos
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="<%= request.getContextPath()%>/AltaProducto">Dar de alta</a>
-                                    <a class="nav-link" href="<%= request.getContextPath()%>/ModificarProducto">Actualizar</a>
-                                </nav>
-                            </div>
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsProductos" aria-expanded="false" aria-controls="collapseLayoutsProductos">
+							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+							    Gestionar productos
+							    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapseLayoutsProductos" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							    <nav class="sb-sidenav-menu-nested nav">
+							        <a class="nav-link" href="<%= request.getContextPath()%>/AltaProducto">Dar de alta</a>
+							        <a class="nav-link" href="<%= request.getContextPath()%>/ModificarProducto">Actualizar</a>
+							    </nav>
+							</div>
+							
+							
+							
+							
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsClientes" aria-expanded="false" aria-controls="collapseLayoutsClientes">
+							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+							    Gestionar clientes
+							    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapseLayoutsClientes" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							    <nav class="sb-sidenav-menu-nested nav">
+							        <a class="nav-link" href="<%= request.getContextPath()%>/AltaUsuario">Dar de alta</a>
+							        <a class="nav-link" href="<%= request.getContextPath()%>/ModificarUsuario">Actualizar</a>
+							    </nav>
+							</div>
+
+
+
+                            
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
+                                Gestionar clientes
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">

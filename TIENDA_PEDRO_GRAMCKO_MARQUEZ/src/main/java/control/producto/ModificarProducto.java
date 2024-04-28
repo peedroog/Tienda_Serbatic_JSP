@@ -31,25 +31,54 @@ public class ModificarProducto extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener el ID del producto desde la solicitud
-        int idProducto = Integer.parseInt(request.getParameter("id"));
 
-        // Obtener los detalles del producto con el ID proporcionado
-        ProductoVO producto = ProductoService.findById(idProducto);
-
-        // Establecer el producto como atributo de solicitud para que pueda ser utilizado en la vista JSP
-        request.setAttribute("producto", producto);
-
+    	List<ProductoVO> productos = ProductoService.findAll();
+    	
+    	request.setAttribute("listaProductos", productos);
+    	
         // Redirigir al formulario de actualización con los datos del producto
         request.getRequestDispatcher("vistas/vistasAdministrador/ModificarProducto.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtener los parámetros del formulario
+        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+        int idCategoria = Integer.parseInt(request.getParameter("idCategoria"));
+        String nombre = request.getParameter("nombre");
+        String descripcion = request.getParameter("descripcion");
+        double precio = Double.parseDouble(request.getParameter("precio"));
+        int stock = Integer.parseInt(request.getParameter("stock"));
+        float impuesto = Float.parseFloat(request.getParameter("impuesto"));
+        String imagen = request.getParameter("imagen");
+        boolean activo = request.getParameter("activo") != null; // Si el checkbox está marcado, devuelve true
 
+        // Crear un objeto ProductoVO con los datos obtenidos
+        ProductoVO producto = new ProductoVO();
+        producto.setId(idProducto);
+        producto.setId_categoria(idCategoria);
+        producto.setNombre(nombre);
+        producto.setDescripcion(descripcion);
+        producto.setPrecio(precio);
+        producto.setStock(stock);
+        producto.setImpuesto(impuesto);
+        producto.setImagen(imagen);
+        producto.setActivo(activo);
 
+        // Llamar al servicio para modificar el producto en la base de datos
+        boolean modificacionExitosa = ProductoService.modificarProducto(producto);
 
-        // Redirige a una página de confirmación o a la lista de productos actualizada
-        response.sendRedirect("productos.jsp");
+        if (modificacionExitosa) {
+            request.setAttribute("mensaje", "El producto se ha modificado correctamente.");
+        } else {
+            request.setAttribute("mensaje", "Hubo un error al modificar el producto.");
+        }
+        
+        List<ProductoVO> productos = ProductoService.findAll();
+        request.setAttribute("listaProductos", productos);
+        request.getRequestDispatcher("vistas/vistasAdministrador/ModificarProducto.jsp").forward(request, response);
+
+        
     }
+
 
 }
