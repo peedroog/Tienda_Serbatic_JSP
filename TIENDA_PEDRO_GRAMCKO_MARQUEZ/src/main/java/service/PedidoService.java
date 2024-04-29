@@ -20,6 +20,10 @@ public class PedidoService {
 		return PedidoDAO.findById(idPedido);
 	}
 	
+	public static List<PedidoVO> findAll(){
+		return PedidoDAO.findAll();
+	}
+	
 	public static List<PedidoVO> devuelveListaPedidos(UsuarioVO usuario){
 		return PedidoDAO.obtenerPedidosPorUsuario(usuario);
 	}
@@ -34,6 +38,14 @@ public class PedidoService {
 
 	public static boolean cancelarPedido(int pedidoId) {
 		return PedidoDAO.cancelarPedido(pedidoId);
+	}
+	
+	public static boolean enviarPedidoAdmin(int id) {
+		return PedidoDAO.enviarPedidoAdmin(id);
+	}
+	
+	public static boolean cancelarPedidoAdmin(int id) {
+		return PedidoDAO.cancelarPedidoAdmin(id);
 	}
 	
 }

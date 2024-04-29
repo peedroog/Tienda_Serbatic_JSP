@@ -1,6 +1,7 @@
 package service;
 
 import java.util.List;
+import java.util.Map;
 
 import model.DAO.ProductoDAO;
 import model.VO.CategoriaVO;
@@ -64,5 +65,9 @@ public class ProductoService {
 	
 	public static boolean bajaProducto(ProductoVO producto) {
 		return ProductoDAO.bajaProducto(producto);
+	}
+	
+	public static Map<Integer, Integer> obtenerProductosVendidos(){
+		return ProductoDAO.obtenerProductosVendidos();
 	}
 }

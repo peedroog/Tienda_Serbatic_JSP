@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="model.VO.*, java.util.List, java.sql.Date" %> <!-- Importa la clase ProductoVO -->
+<%@ page import="model.VO.*, java.util.List, java.sql.Date, java.text.DecimalFormat" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -137,163 +137,202 @@
             <div id="layoutSidenav_content">
             
             
-<main style="margin: 50px;">
-    <h1 class="display-4">Lista de Productos</h1>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
+<main>
+    <div class="container" style="margin-top: 50px; margin-bottom: 50px">
+        <h1 class="mt-4 text-center">Lista de Pedidos</h1>
+	  
+	           <!-- Separador -->
+	    <hr class="mx-2" style="border-color: #ccc; border: 2px solid; margin-top: 20px; margin-bottom: 55px;">
+
+
+<!-- En lista-pedidos.jsp o cualquier otra página donde desees mostrar los mensajes -->
+<%
+    String mensajeExito = (String) request.getSession().getAttribute("mensajeExito");
+    String mensajeError = (String) request.getSession().getAttribute("mensajeError");
+    request.getSession().removeAttribute("mensajeExito"); // Limpiar mensaje de éxito después de mostrarlo
+    request.getSession().removeAttribute("mensajeError"); // Limpiar mensaje de error después de mostrarlo
+%>
+
+<%-- Mostrar mensaje de éxito si está presente --%>
+<% if (mensajeExito != null && !mensajeExito.isEmpty()) { %>
+    <div class="alert alert-success" role="alert">
+        <%= mensajeExito %>
+    </div>
+<% } %>
+
+<%-- Mostrar mensaje de error si está presente --%>
+<% if (mensajeError != null && !mensajeError.isEmpty()) { %>
+    <div class="alert alert-danger" role="alert">
+        <%= mensajeError %>
+    </div>
+<% } %>
+        <table class="table">
+            <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
+                    <th>Estado del pedido</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Detalles</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <% 
-                List<ProductoVO> listaProductos = (List<ProductoVO>) request.getAttribute("listaProductos"); 
-                for (ProductoVO producto : listaProductos) {      
-                	
-                    
-                    // Aquí se comprueba el rol del usuario
-
-                    int rolUsuario = usuario.getId_rol();
+                <%
+                DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                List<PedidoVO> listaPedidos = (List<PedidoVO>) request.getAttribute("listaPedidos");
+                int pageSize = 20;
+                int totalPedidos = listaPedidos.size();
+                int totalPages = (int) Math.ceil((double) totalPedidos / pageSize);
+                String pageParam = request.getParameter("page");
+                int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
+                int startIndex = (currentPage - 1) * pageSize;
+                int endIndex = Math.min(startIndex + pageSize, totalPedidos);
+                List<PedidoVO> pedidosPaginados = listaPedidos.subList(startIndex, endIndex);
+                for (PedidoVO pedido : pedidosPaginados) {
                 %>
-				<tr>
-				    <td><%= producto.getId() %></td>
-				    <td><%= producto.getNombre() %></td>
-				    <td>
-				        <% if(rolUsuario == 2 || rolUsuario == 3) { %>
-				            <a href="#" class="actualizar-producto"
-				               data-id="<%= producto.getId() %>"
-				               data-nombre="<%= producto.getNombre() %>"
-				               data-precio="<%= producto.getPrecio() %>"
-				               data-idCategoria="<%= producto.getId_categoria() %>"
-				               data-descripcion="<%= producto.getDescripcion() %>"
-				               data-stock="<%= producto.getStock() %>"
-				               data-impuesto="<%= producto.getImpuesto() %>"
-				               data-imagen="<%= producto.getImagen() %>"
-				               data-activo="<%= producto.isActivo() %>">Actualizar</a>
-				               			               
-				        <% } %>
-				    </td>
-				</tr>
-                <% } %>
+                <tr>
+                    <td><%= pedido.getEstado() %></td>
+                    <td><%= pedido.getFecha() %></td>
+                    <td><%= decimalFormat.format(pedido.getTotal()) %>€</td>
+                    <td><a href="#" class="detalle-pedido" data-pedido-id="<%= pedido.getId() %>">Detalles</a></td>
+                    <td>
+		                <% if (pedido.getEstado().equals("Pendiente de envío")) { %>
+		                    <form action="AdminEnviarPedido" method="POST">
+		                        <input type="hidden" name="pedidoId" value="<%= pedido.getId() %>">
+		                        <button type="submit" class="btn btn-success" style="border-radius: 5px; color: white;">Envíar pedido</button>
+		                    </form>
+		                <% } %>
+           			 </td>
+           			 <td>
+		                <%
+		                if (pedido.getEstado().equals("Pendiente cancelación") && usuario.getId_rol() == 3) { %>
+		                    <form action="AdminCancelarPedido" method="POST">
+		                        <input type="hidden" name="pedidoId" value="<%= pedido.getId() %>">
+		                        <button type="submit" class="btn btn-danger" style="border-radius: 5px; color: white;">Cancelar pedido</button>
+		                    </form>
+		                <% } %>
+           			 </td>
+                </tr>
+                <%
+                }
+                %>
             </tbody>
         </table>
-    </div>
-    
-        <div id="mensaje">
-        <% 
-        String mensaje = (String) request.getAttribute("mensaje");
-        if (mensaje != null && !mensaje.isEmpty()) { 
-        %>
-        <div class="alert alert-success" role="alert">
-            <%= mensaje %>
-        </div>
-        <% } %>
-    </div>
-    
-<!-- Formulario de Actualización (oculto por defecto) -->
-<div id="formulario-actualizacion" style="display: none; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
 
-    <h2 style="margin-bottom: 20px;">Actualizar Producto</h2>
-    <form action="ModificarProducto" method="post">
-        <div style="margin-bottom: 10px;">
-        <input  type="hidden" id="idProducto" name="idProducto">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="precio">Precio:</label>
-            <input type="text" id="precio" name="precio" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="idCategoria">ID Categoría:</label>
-            <input type="text" id="idCategoria" name="idCategoria" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" class="form-control" rows="5"></textarea>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="stock">Stock:</label>
-            <input type="number" id="stock" name="stock" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="impuesto">Impuesto:</label>
-            <input type="number" id="impuesto" name="impuesto" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="imagen">Imagen:</label>
-            <input type="text" id="imagen" name="imagen" class="form-control">
+        <!-- Modales de detalles del pedido -->
+        <%
+        for (PedidoVO pedido : pedidosPaginados) {
+        %>
+        <div id="modalDetalles_<%= pedido.getId() %>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalDetallesLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalDetallesLabel">Detalles del pedido</h5>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de producto</th>
+                                    <th>Precio Unidad</th>
+                                    <th>Unidades</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+							<tbody>
+							    <!-- Iterar sobre las líneas de pedido y mostrar los detalles -->
+							    <%
+							    List<DetallePedidoVO> lineasPedido = (List<DetallePedidoVO>) request.getAttribute("lineasPedido_" + pedido.getId());
+							    List<String> nombresProductos = (List<String>) request.getAttribute("nombresProductos_" + pedido.getId());
+							    for (int i = 0; i < lineasPedido.size(); i++) {
+							        String nombreProducto = nombresProductos.get(i);
+							        DetallePedidoVO linea = lineasPedido.get(i);
+							    %>
+							    <tr>
+							        <td><%= nombreProducto %></td>
+							        <td><%= decimalFormat.format(linea.getPrecio_unidad() * (1 + (linea.getImpuesto() / 100.0))) %>€</td>
+							        <td><%= linea.getUnidades() %></td>
+							        <td><%= decimalFormat.format(linea.getTotal() * (1 + (linea.getImpuesto() / 100.0))) %>€</td>
+							    </tr>
+							    <% } %>
+							</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <%
-        // Aquí se comprueba el rol del usuario
-        int rolUsuario = usuario.getId_rol();
-        if(rolUsuario == 3){ %>
-            <div style="margin-bottom: 10px;">
-            <label for="activo">Activo:</label>
-            <input type="checkbox" id="activo" name="activo" class="form-check-input">
-        </div>
-        <% } %>
-				            	   
+        }
+        %>
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
-</div>
+        <!-- Paginación -->
+        <nav aria-label="Page navigation example" style="margin-top:40px;">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <%= currentPage == 1 ? "disabled" : "" %>">
+                    <a class="page-link" href="?page=<%= currentPage - 1 %>" tabindex="-1">Anterior</a>
+                </li>
+                <% for (int i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i == currentPage ? "active" : "" %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+                <li class="page-item <%= currentPage == totalPages ? "disabled" : "" %>">
+                    <a class="page-link" href="?page=<%= currentPage + 1 %>">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
 
-
+    </div>
 
 
 </main>
 
 
 
+
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+        
+
+
+</body>
     	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="vistas/vistasAdministrador/indexEmpleado/js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        
-<script>
-$(document).ready(function() {
-    $('.actualizar-producto').on('click', function(e) {
-        e.preventDefault();
-        var idProducto = $(this).data('id');
-        
-        // Obtener los datos del producto del atributo de datos personalizados
-        var nombre = $(this).data('nombre');
-        var precio = $(this).data('precio');
-        var idCategoria = $(this).data('idcategoria');
-        var descripcion = $(this).data('descripcion');
-        var stock = $(this).data('stock');
-        var impuesto = $(this).data('impuesto');
-        var imagen = $(this).data('imagen');
-        var activo = $(this).data('activo');
-        
-        // Rellenar el formulario con los datos del producto
-        $('#idProducto').val(idProducto);
-        $('#nombre').val(nombre);
-        $('#precio').val(precio);
-        $('#idCategoria').val(idCategoria);
-        $('#descripcion').val(descripcion);
-        $('#stock').val(stock);
-        $('#impuesto').val(impuesto);
-        $('#imagen').val(imagen);
-        $('#activo').prop('checked', activo);
-        
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS (opcional, si necesitas funcionalidad JS de Bootstrap) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- JavaScript personalizado para abrir el modal al hacer clic en Detalles -->
+    <script>
+    $(document).ready(function() {
+        // Función para mostrar los detalles del pedido al hacer clic en el enlace
+        $('a.detalle-pedido').click(function(event) {
+            // Evitar el comportamiento predeterminado de los enlaces
+            event.preventDefault();
 
-        
-        // Mostrar el formulario
-        $('#formulario-actualizacion').show();
+            // Obtener el ID del pedido desde el atributo data
+            var idPedido = $(this).data('pedido-id');
+            
+            // Construir el selector del modal usando el ID del pedido
+            var modalSelector = '#modalDetalles_' + idPedido;
+            
+            // Mostrar el modal de detalles del pedido correspondiente
+            $(modalSelector).modal('show');
+        });
     });
-});
-</script>
+    </script>
+    
+<style>
+    /* Establecer un alto fijo para las filas */
+    .table tbody tr {
+        height: 50px; /* Ajusta este valor según tus necesidades */
+        align-items: center;
+    }
+</style>
 
-
-
-    </body>
 </html>
 

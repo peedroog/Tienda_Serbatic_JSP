@@ -50,6 +50,36 @@ public class PedidoDAO {
 		return 0;
 
 	}
+	
+	public static List<PedidoVO> findAll() {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		List<PedidoVO> listaPedidos = new ArrayList<>();
+
+		try {
+			connection = Conexion.getConexion();
+			String sql = "SELECT * FROM pedidos";
+			statement = connection.prepareStatement(sql);
+			resultSet = statement.executeQuery();
+
+			while (resultSet.next()) {
+				PedidoVO pedido = new PedidoVO();
+				pedido.setId(resultSet.getInt("id"));
+				pedido.setId_usuario(resultSet.getInt("id_usuario"));
+				pedido.setFecha(resultSet.getDate("fecha"));
+				pedido.setMetodo_pago(resultSet.getString("metodo_pago"));
+				pedido.setEstado(resultSet.getString("estado"));
+				pedido.setNum_factura(resultSet.getString("num_factura"));
+				pedido.setTotal(resultSet.getDouble("total"));
+				listaPedidos.add(pedido);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return listaPedidos;
+	}
 
 	public static PedidoVO findById(int idPedido) {
 		Connection connection = null;
@@ -199,6 +229,54 @@ public class PedidoDAO {
 	        try {
 	            con = Conexion.getConexion();
 	            ps = con.prepareStatement("UPDATE pedidos SET estado = 'Pendiente cancelación' WHERE id = ?");
+	            ps.setInt(1, id);
+
+	            int filas = ps.executeUpdate();
+
+	            if (filas > 0) {
+	            	exito = true;
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }        
+
+	        return exito;
+	   }
+	   
+	   public static boolean cancelarPedidoAdmin(int id) {
+	        Connection con = null;
+	        PreparedStatement ps = null;
+
+	        boolean exito = false;
+	        
+	        try {
+	            con = Conexion.getConexion();
+	            ps = con.prepareStatement("UPDATE pedidos SET estado = 'Cancelado' WHERE id = ?");
+	            ps.setInt(1, id);
+
+	            int filas = ps.executeUpdate();
+
+	            if (filas > 0) {
+	            	exito = true;
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }        
+
+	        return exito;
+	   }
+	   
+	   public static boolean enviarPedidoAdmin(int id) {
+	        Connection con = null;
+	        PreparedStatement ps = null;
+
+	        boolean exito = false;
+	        
+	        try {
+	            con = Conexion.getConexion();
+	            ps = con.prepareStatement("UPDATE pedidos SET estado = 'Enviado' WHERE id = ?");
 	            ps.setInt(1, id);
 
 	            int filas = ps.executeUpdate();

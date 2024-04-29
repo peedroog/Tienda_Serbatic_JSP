@@ -48,6 +48,7 @@ public class ModificarUsuario extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    // Obtener los parámetros del formulario
+		int id = Integer.parseInt(request.getParameter("idUsuario"));
 	    int idRol = Integer.parseInt(request.getParameter("id_rol"));
 	    String email = request.getParameter("email");
 	    String nombre = request.getParameter("nombre");
@@ -62,8 +63,9 @@ public class ModificarUsuario extends HttpServlet {
 
 	    // Crear un objeto UsuarioVO con los datos obtenidos
 	    UsuarioVO usuario = new UsuarioVO();
+	    usuario.setId(id);
 	    usuario.setId_rol(idRol);
-	    usuario.setEmail(email);
+	    usuario.setEmail(email);	    
 	    usuario.setNombre(nombre);
 	    usuario.setApellido1(apellido1);
 	    usuario.setApellido2(apellido2);
@@ -74,7 +76,11 @@ public class ModificarUsuario extends HttpServlet {
 	    usuario.setDni(dni);
 	    usuario.setActivo(activo);
 	    
+	    String clave =((String) request.getParameter("clave"));
+	    StrongPasswordEncryptor encriptar = new StrongPasswordEncryptor();
 
+	    usuario.setClave(encriptar.encryptPassword(clave));
+	    
 	    // Llamar al servicio para agregar el usuario a la base de datos
 	    boolean resultado = UsuarioService.actualizaUsuario(usuario);
 
@@ -86,9 +92,7 @@ public class ModificarUsuario extends HttpServlet {
 	        request.setAttribute("mensaje", "Hubo un error al modificar el usuario.");
 	    }
 	    
-        List<UsuarioVO> listaUsuarios= UsuarioService.findAll();
-        request.setAttribute("listaUsuarios", listaUsuarios);
-	    request.getRequestDispatcher("vistas/vistasAdministrador/ModificarUsuario.jsp").forward(request, response);
+	    response.sendRedirect(request.getContextPath() + "/ModificarUsuario");
 	}
 
 

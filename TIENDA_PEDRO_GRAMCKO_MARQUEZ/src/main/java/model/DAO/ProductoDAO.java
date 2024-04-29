@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import conexion.Conexion;
 import model.VO.CategoriaVO;
@@ -41,7 +43,7 @@ public class ProductoDAO {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return lista;
 	}
@@ -368,6 +370,37 @@ public class ProductoDAO {
 		}
 
 		return exito;
+	}
+	
+	public static Map<Integer, Integer> obtenerProductosVendidos(){
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Map<Integer, Integer> productosVendidos = new HashMap<>();
+
+		try {
+		    con = Conexion.getConexion();
+		    ps = con.prepareStatement("SELECT id_producto, unidades FROM detalle_pedido");
+
+		    rs = ps.executeQuery();
+		    while (rs.next()) {
+		        int idProducto = rs.getInt("id_producto");
+		        int cantidadVendida = rs.getInt("unidades");
+		        
+		        // Si el idProducto ya está en el mapa, sumar la cantidad vendida actual a la cantidad existente
+		        if (productosVendidos.containsKey(idProducto)) {
+		            int cantidadExistente = productosVendidos.get(idProducto);
+		            productosVendidos.put(idProducto, cantidadExistente + cantidadVendida);
+		        } else {
+		            productosVendidos.put(idProducto, cantidadVendida);
+		        }
+		    }
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}
+
+		return productosVendidos;
 	}
 
 }

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="model.VO.*, java.util.List" %>
+<%@ page import="model.VO.*, java.util.List, java.sql.Date" %> <!-- Importa la clase ProductoVO -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -138,64 +138,126 @@
             
             
 <main style="margin: 50px;">
+    <h1 class="display-4">Lista de Categorías</h1>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% 
+                List<CategoriaVO> listaCategorias = (List<CategoriaVO>) request.getAttribute("listaCategorias"); 
+                for (CategoriaVO categoria : listaCategorias) {      
+                	
+                    
 
-<div id="mensaje">
-    <% 
-    String mensaje = (String) request.getAttribute("mensaje");
-    if (mensaje != null) { 
-    %>
-    <div class="alert alert-success" role="alert">
-        <%= mensaje %>
+                    int rolUsuario = usuario.getId_rol();
+                %>
+				<tr>
+				    <td><%= categoria.getId() %></td>
+				    <td><%= categoria.getNombre() %></td>
+				    <td>
+				        <% if(rolUsuario == 2 || rolUsuario == 3) { %>
+				            <a href="#" class="actualizar-categoria"
+				               data-id="<%= categoria.getId() %>"
+				               data-nombre="<%= categoria.getNombre() %>"			               
+				               data-descripcion="<%= categoria.getDescripcion() %>"
+				               data-activo="<%= categoria.isActivo() %>">Actualizar</a>
+				               			               
+				        <% } %>
+				    </td>
+				</tr>
+                <% } %>
+            </tbody>
+        </table>
     </div>
-    <% } %>
-</div>
-	
-	<div id="formulario-actualizacion" style="padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
-    <h2>Dar de alta un producto</h2>
-    <form action="AltaProducto" method="post">
-        <input type="hidden" id="idProducto" name="idProducto">
-        <div class="form-group">
-            <label for="idCategoria">ID de Categoría:</label>
-            <input type="number" class="form-control" id="id_categoria" name="id_categoria">
+    
+    
+        <div id="mensaje">
+        <% 
+        String mensaje = (String) request.getAttribute("mensaje");
+        if (mensaje != null && !mensaje.isEmpty()) { 
+        %>
+        <div class="alert alert-success" role="alert">
+            <%= mensaje %>
         </div>
-        <div class="form-group">
+        <% } %>
+    </div>
+<!-- Formulario de Actualización (oculto por defecto) -->
+<div id="formulario-actualizacion" style="display: none; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+
+    <h2 style="margin-bottom: 20px;">Actualizar Categoria</h2>
+    <form action="ModificarCategoria" method="post">
+        <div style="margin-bottom: 10px;">
+        <input  type="hidden" id="idCategoria" name="idCategoria">
             <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre">
+            <input type="text" id="nombre" name="nombre" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="descripcion">Descripción:</label>
-            <input type="text" class="form-control" id="descripcion" name="descripcion">
+        <div style="margin-bottom: 10px;">
+            <label for="idCategoria">Descripción de la categoría:</label>
+            <input type="text" id="descripcion" name="descripcion" class="form-control">
         </div>
-        <div class="form-group">
-            <label for="precio">Precio:</label>
-            <input type="number" class="form-control" id="precio" name="precio">
+        <%
+        // Aquí se comprueba el rol del usuario
+        int rolUsuario = usuario.getId_rol();
+        if(rolUsuario == 3){ %>
+            <div style="margin-bottom: 10px;">
+            <label for="activo">Activo:</label>
+            <input type="checkbox" id="activo" name="activo" class="form-check-input">
         </div>
-        <div class="form-group">
-            <label for="stock">Stock:</label>
-            <input type="number" class="form-control" id="stock" name="stock">
-        </div>
-        <div class="form-group">
-            <label for="impuesto">Impuesto:</label>
-            <input type="number" class="form-control" id="impuesto" name="impuesto">
-        </div>
-        <div class="form-group">
-            <label for="imagen">Imagen:</label>
-            <input type="text" class="form-control" id="imagen" name="imagen">
-        </div>
+        <% } %>
+				            	   
+
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>
-	
+
+
+
+
 </main>
 
 
 
             </div>
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="vistas/vistasAdministrador/indexEmpleado/js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        
+<script>
+$(document).ready(function() {
+    $('.actualizar-categoria').on('click', function(e) {
+        e.preventDefault();
+        var idCategoria = $(this).data('id');
+        
+        // Obtener los datos del producto del atributo de datos personalizados
+        var nombre = $(this).data('nombre');
+        var descripcion = $(this).data('descripcion');
+        var activo = $(this).data('activo');
+        
+        // Rellenar el formulario con los datos del producto
+        $('#idCategoria').val(idCategoria);
+        $('#nombre').val(nombre);
+        $('#descripcion').val(descripcion);
+        $('#activo').prop('checked', activo);
+        
+
+        
+        // Mostrar el formulario
+        $('#formulario-actualizacion').show();
+    });
+});
+</script>
+
+
+
     </body>
 </html>
 

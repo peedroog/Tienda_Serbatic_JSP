@@ -10,6 +10,66 @@
  * Copyright 2011-2022 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+ *{
+ 	font-family: "roboto";
+ 	
+ }
+ 
+ .sb-topnav{
+ 	height: 60px;
+ }
+ 
+.fixed-top, .sb-nav-fixed #layoutSidenav #layoutSidenav_nav, .sb-nav-fixed .sb-topnav{
+ 	background-color: #012d25 !important;
+ 	color: white !important;
+ }
+ 
+.sb-sidenav{
+ 	background-color: #012d25 !important;
+ 	color: white !important;
+ }
+ 
+.sb-sidenav-dark .sb-sidenav-menu .nav-link{
+	color: white !important;
+}
+
+.sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-heading{
+	color: gray;
+}
+
+.svg:not(:host).svg-inline--fa, svg:not(:root).svg-inline--fa{
+	color: #84f5c6;
+}
+
+.sb-topnav .navbar-brand{
+	color: white;
+	font-family: "roboto";
+}
+
+.sb-topnav{
+	height: 80px !important;
+}
+
+svg{
+	height: 40px;
+} 
+
+.me-lg-0{
+	margin-left: 80px;	
+}
+
+main{
+	margin-top: 40px;
+}
+
+.dropdown-toggle{
+	color: white !important;
+}
+
+.btn-primary{
+	background-color: #84f5c6 !important;
+	border: none !important;
+}
 :root {
   --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
