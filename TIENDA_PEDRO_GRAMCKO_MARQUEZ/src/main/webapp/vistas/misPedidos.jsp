@@ -76,6 +76,8 @@
                     <th>Fecha</th>
                     <th>Total</th>
                     <th>Detalles</th>
+                    <th>Número de fáctura</th>
+                    <th>Acciones</th>
                     <th></th>
                 </tr>
             </thead>
@@ -98,6 +100,13 @@
                     <td><%= pedido.getFecha() %></td>
                     <td><%= decimalFormat.format(pedido.getTotal()) %>€</td>
                     <td><a href="#" class="detalle-pedido" data-pedido-id="<%= pedido.getId() %>">Detalles</a></td>
+					<td>
+					    <% if (pedido.getNum_factura() == null || pedido.getNum_factura().isEmpty()) { %>
+					        No disponible
+					    <% } else { %>
+					        <%= pedido.getNum_factura() %>
+					    <% } %>
+					</td>
                     <td>
 		                <% if (pedido.getEstado().equals("Pendiente de envío")) { %>
 		                    <form action="CancelarPedido" method="POST">

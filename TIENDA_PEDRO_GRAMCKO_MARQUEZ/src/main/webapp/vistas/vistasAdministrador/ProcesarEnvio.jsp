@@ -54,7 +54,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Inicio</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="<%= request.getContextPath()%>/Admin">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Estadísticas
                             </a>
@@ -102,20 +102,28 @@
 
                             
                             
-                            <div class="sb-sidenav-menu-heading">Pedidos y cancelaciones</div>
+                                <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
                             <a class="nav-link" href="<%= request.getContextPath()%>/AdminEnviarPedido">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Procesar pedidos
                             </a>
                             
+                            
+                            <div class="sb-sidenav-menu-heading">Empleados</div>
                             <% UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
                     		if(usuario.getId_rol() == 3){%>
                     			       
-                    		<div class="sb-sidenav-menu-heading">Empleados</div>	           		
-                            <a class="nav-link" href="<%= request.getContextPath()%>/AdminCancelarPedido">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Dar de alta a empleado
-                            </a>
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsEmpleados" aria-expanded="false" aria-controls="collapseLayoutsEmpleados">
+							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+							    Gestionar empleados
+							    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapseLayoutsEmpleados" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							    <nav class="sb-sidenav-menu-nested nav">
+							        <a class="nav-link" href="<%= request.getContextPath()%>/AltaEmpleado">Dar de alta</a>
+							        <a class="nav-link" href="<%= request.getContextPath()%>/ModificarEmpleado">Actualizar</a>
+							    </nav>
+							</div>
                             
                             <% } %>
                         </div>
@@ -173,7 +181,10 @@
                     <th>Fecha</th>
                     <th>Total</th>
                     <th>Detalles</th>
-                    <th>Acciones</th>
+                    <th>Número de factura</th>
+                    <th>Envíar pedido</th>
+                    <th>Cancelar pedido</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -195,6 +206,13 @@
                     <td><%= pedido.getFecha() %></td>
                     <td><%= decimalFormat.format(pedido.getTotal()) %>€</td>
                     <td><a href="#" class="detalle-pedido" data-pedido-id="<%= pedido.getId() %>">Detalles</a></td>
+                    <td>
+					    <% if (pedido.getNum_factura() == null || pedido.getNum_factura().isEmpty()) { %>
+					        No disponible
+					    <% } else { %>
+					        <%= pedido.getNum_factura() %>
+					    <% } %>
+					</td>
                     <td>
 		                <% if (pedido.getEstado().equals("Pendiente de envío")) { %>
 		                    <form action="AdminEnviarPedido" method="POST">

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,12 +8,15 @@
 <title>HappyPets</title>
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="vistas/login/login.css" rel="stylesheet">
 </head>
 <header>
 <jsp:include page="/vistas/header/header.jsp"/>
 </header>
 <body>
-<div class="container" style="margin-top: 50px; margin-bottom: 50px">
+			<% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
+<a class="hidden" href="<%=request.getContextPath() %>?lang=en"></a>
+<div class="container login-container">
     <h1 class="mt-4">Iniciar sesión</h1>
     
         <!-- Div para mostrar el mensaje de error -->

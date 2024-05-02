@@ -2,6 +2,8 @@ package control.pedido;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +40,25 @@ public class FiltrarPedido extends HttpServlet {
     	String orderBy = request.getParameter("orderBy");
         UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
 
+	    String lang = request.getParameter("lang");
+	    
 
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
+        
+        
+        
         if (orderBy != null) {
 
             switch (orderBy) {

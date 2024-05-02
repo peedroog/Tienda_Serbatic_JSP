@@ -12,6 +12,19 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="vistas/vistasAdministrador/indexEmpleado/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    	<style>
+	
+		#formulario-actualizacion{
+		    width: 60%;
+    		margin: 0 auto;
+    		padding: 30px;
+    		}
+    		
+    	.form-group{
+    		margin-top: 10px;
+    	}
+	
+	</style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand">
@@ -54,7 +67,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Inicio</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="<%= request.getContextPath()%>/Admin">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Estadísticas
                             </a>
@@ -102,20 +115,28 @@
 
                             
                             
-                            <div class="sb-sidenav-menu-heading">Pedidos y cancelaciones</div>
+                                     <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
                             <a class="nav-link" href="<%= request.getContextPath()%>/AdminEnviarPedido">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Procesar pedidos
                             </a>
                             
+                            
+                            <div class="sb-sidenav-menu-heading">Empleados</div>
                             <% UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
                     		if(usuario.getId_rol() == 3){%>
                     			       
-                    		<div class="sb-sidenav-menu-heading">Empleados</div>	           		
-                            <a class="nav-link" href="<%= request.getContextPath()%>/AdminCancelarPedido">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Dar de alta a empleado
-                            </a>
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsEmpleados" aria-expanded="false" aria-controls="collapseLayoutsEmpleados">
+							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+							    Gestionar empleados
+							    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapseLayoutsEmpleados" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							    <nav class="sb-sidenav-menu-nested nav">
+							        <a class="nav-link" href="<%= request.getContextPath()%>/AltaEmpleado">Dar de alta</a>
+							        <a class="nav-link" href="<%= request.getContextPath()%>/ModificarEmpleado">Actualizar</a>
+							    </nav>
+							</div>
                             
                             <% } %>
                         </div>
@@ -179,10 +200,10 @@
             <input type="number" class="form-control" id="impuesto" name="impuesto">
         </div>
         <div class="form-group">
-            <label for="imagen">Imagen:</label>
+            <label for="imagen">URL de la imagen:</label>
             <input type="text" class="form-control" id="imagen" name="imagen">
         </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Guardar</button>
     </form>
 </div>
 	

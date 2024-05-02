@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.text.DecimalFormat"%>
+    pageEncoding="UTF-8" import="java.text.DecimalFormat, java.util.*"%>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,7 +13,8 @@
 <jsp:include page="/vistas/header/header.jsp"/>
 </header>
 <body>
-
+			<% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
+<a class="hidden" href="<%=request.getContextPath() %>?lang=en"></a>
 <div class="container" style="margin-top: 50px; margin-bottom: 50px">
     <div class="row mt-5">
         <div class="col-md-12 text-center">

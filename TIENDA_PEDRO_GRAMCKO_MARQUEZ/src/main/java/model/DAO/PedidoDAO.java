@@ -158,7 +158,7 @@ public class PedidoDAO {
 		return listaPedidos;
 	}
 	
-	public static List<PedidoVO> filtrarPedidoAsc(UsuarioVO usuario) {
+	public static List<PedidoVO> filtrarPedidoDesc(UsuarioVO usuario) {
 	    Connection con = null;
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
@@ -189,7 +189,7 @@ public class PedidoDAO {
 	    return pedidos;
 	}
 	
-	public static List<PedidoVO> filtrarPedidoDesc(UsuarioVO usuario) {
+	public static List<PedidoVO> filtrarPedidoAsc(UsuarioVO usuario) {
 	    Connection con = null;
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
@@ -269,27 +269,51 @@ public class PedidoDAO {
 	   }
 	   
 	   public static boolean enviarPedidoAdmin(int id) {
-	        Connection con = null;
-	        PreparedStatement ps = null;
+		    Connection con = null;
+		    PreparedStatement ps = null;
+		    ResultSet rs = null;
+		    boolean exito = false;
+		    
+		    try {
+		        con = Conexion.getConexion();
+		        
+		        // Paso 1: Obtener el número de factura actual
+		        ps = con.prepareStatement("SELECT valor FROM configuracion WHERE clave = 'factura'");
+		        rs = ps.executeQuery();
+		        String numeroFactura = "";
+		        if (rs.next()) {
+		            numeroFactura = rs.getString("valor");
+		        }
+		        
+		        // Paso 2: Incrementar el número de factura en 1
+		        int numFacturaInt = Integer.parseInt(numeroFactura);
+		        numFacturaInt++;
+		        
+		        // Paso 3: Actualizar el estado del pedido a "Enviado"
+		        ps = con.prepareStatement("UPDATE pedidos SET estado = 'Enviado' WHERE id = ?");
+		        ps.setInt(1, id);
+		        int filasPedido = ps.executeUpdate();
+		        
+		        // Paso 4: Actualizar el número de factura en el pedido
+		        ps = con.prepareStatement("UPDATE pedidos SET num_factura = ? WHERE id = ?");
+		        ps.setString(1, String.format("%05d", numFacturaInt));
+		        ps.setInt(2, id);
+		        int filasFactura = ps.executeUpdate();
 
-	        boolean exito = false;
-	        
-	        try {
-	            con = Conexion.getConexion();
-	            ps = con.prepareStatement("UPDATE pedidos SET estado = 'Enviado' WHERE id = ?");
-	            ps.setInt(1, id);
-
-	            int filas = ps.executeUpdate();
-
-	            if (filas > 0) {
-	            	exito = true;
-	            }
-	            
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }        
-
-	        return exito;
-	   }
+		        // Si ambas actualizaciones tienen éxito, se considera una operación exitosa
+		        if (filasPedido > 0 && filasFactura > 0) {
+		            exito = true;
+		            
+		            // Actualizar el número de factura en la tabla de configuración
+		            ps = con.prepareStatement("UPDATE configuracion SET valor = ? WHERE clave = 'factura'");
+		            ps.setString(1, String.valueOf(numFacturaInt));
+		            ps.executeUpdate();
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    
+		    return exito;
+		}
 
 }

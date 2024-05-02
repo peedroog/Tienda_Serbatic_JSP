@@ -3,7 +3,9 @@ package control.carrito;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,6 +47,23 @@ public class FinalizarCompra extends HttpServlet {
 		UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
 		Map<ProductoVO, Integer> carrito = (Map<ProductoVO, Integer>) request.getSession().getAttribute("carrito");
 
+	    String lang = request.getParameter("lang");
+	    
+
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
+		
 		// Verificar el stock de cada producto en el carrito
 		for (Map.Entry<ProductoVO, Integer> entry : carrito.entrySet()) {
 			ProductoVO producto = entry.getKey();
@@ -106,6 +125,23 @@ public class FinalizarCompra extends HttpServlet {
 
 		int idPedido = PedidoService.devolverIdPedido(pedido, usuario, carrito);
 
+	    String lang = request.getParameter("lang");
+	    
+
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
+		
 		for (Map.Entry<ProductoVO, Integer> entry : carrito.entrySet()) {
 			ProductoVO producto = entry.getKey();
 			Integer cantidad = entry.getValue();

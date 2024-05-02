@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -44,7 +46,24 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		request.getRequestDispatcher("/vistas/login.jsp").forward(request, response);
+	    String lang = request.getParameter("lang");
+	    
+
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
+		
+		request.getRequestDispatcher("/vistas/login/login.jsp").forward(request, response);
 	}
 
 	/**
@@ -57,6 +76,8 @@ public class Login extends HttpServlet {
 		    String clave = request.getParameter("clave");
 		    request.getSession().setAttribute("email", email);
 		    StrongPasswordEncryptor encriptar = new StrongPasswordEncryptor();
+		    
+
 
 		    UsuarioVO usuario = UsuarioService.iniciarSesion(email, clave);
 		    if (usuario != null && encriptar.checkPassword(clave, usuario.getClave())) {
@@ -95,7 +116,7 @@ public class Login extends HttpServlet {
 		    } else {
 		        // Si el usuario no existe o la contraseña es incorrecta, configuramos un atributo de solicitud para indicar el error.
 		        request.setAttribute("errorInicioSesion", "El usuario o la contraseña son incorrectos");
-		        request.getRequestDispatcher("/vistas/login.jsp").forward(request, response);
+		        request.getRequestDispatcher("/vistas/login/login.jsp").forward(request, response);
 		    }
 		}
 

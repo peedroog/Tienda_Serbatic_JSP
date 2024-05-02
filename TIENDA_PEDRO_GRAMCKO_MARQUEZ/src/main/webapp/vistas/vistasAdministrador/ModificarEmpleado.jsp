@@ -12,7 +12,10 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="vistas/vistasAdministrador/indexEmpleado/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+	
     </head>
+    
+
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand">
             <!-- Navbar Brand-->
@@ -102,7 +105,7 @@
 
                             
                             
-                                  <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
+                                <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
                             <a class="nav-link" href="<%= request.getContextPath()%>/AdminEnviarPedido">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Procesar pedidos
@@ -110,8 +113,8 @@
                             
                             
                             <div class="sb-sidenav-menu-heading">Empleados</div>
-                            <% UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
-                    		if(usuario.getId_rol() == 3){%>
+                            <% UsuarioVO usuarioRol = (UsuarioVO) request.getSession().getAttribute("usuario");
+                    		if(usuarioRol.getId_rol() == 3){%>
                     			       
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsEmpleados" aria-expanded="false" aria-controls="collapseLayoutsEmpleados">
 							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -131,9 +134,9 @@
                     <div class="sb-sidenav-footer">
                         <div class="small">Rol:</div>
 						  <p align="center" style="font-size: 20px; color: RED;">
-						    <% if(usuario.getId_rol() == 2) { %>
+						    <% if(usuarioRol.getId_rol() == 2) { %>
 						        Empleado
-						    <% } else if (usuario.getId_rol() == 3) { %>
+						    <% } else if (usuarioRol.getId_rol() == 3) { %>
 						        Administrador
 						    <% } %>
 						</p>
@@ -146,41 +149,48 @@
             
             
 <main style="margin: 50px;">
-    <h1 class="display-4">Lista de Productos</h1>
+    <h1 class="display-4">Lista de empleados</h1>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
-                    <th>Nombre</th>
+                    <th>ID Rol</th>
+                    <th>Email</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <% 
-                List<ProductoVO> listaProductos = (List<ProductoVO>) request.getAttribute("listaProductos"); 
-                for (ProductoVO producto : listaProductos) {      
+            	UsuarioVO user = (UsuarioVO) request.getSession().getAttribute("usuario");
+                List<UsuarioVO> listaUsuarios = (List<UsuarioVO>) request.getAttribute("listaUsuarios"); 
+                for (UsuarioVO usuario: listaUsuarios) {      
                 	
                     
-                    // Aquí se comprueba el rol del usuario
-
-                    int rolUsuario = usuario.getId_rol();
+                	user = (UsuarioVO) request.getSession().getAttribute("usuario");
+                    int rolUsuario = user.getId_rol();
+                    
                 %>
 				<tr>
-				    <td><%= producto.getId() %></td>
-				    <td><%= producto.getNombre() %></td>
+				    <td><%= usuario.getId() %></td>
+				    <td><%= usuario.getId_rol() %></td>
+				    <td><%= usuario.getEmail() %></td>
 				    <td>
 				        <% if(rolUsuario == 2 || rolUsuario == 3) { %>
-				            <a href="#" class="actualizar-producto"
-				               data-id="<%= producto.getId() %>"
-				               data-nombre="<%= producto.getNombre() %>"
-				               data-precio="<%= producto.getPrecio() %>"
-				               data-idCategoria="<%= producto.getId_categoria() %>"
-				               data-descripcion="<%= producto.getDescripcion() %>"
-				               data-stock="<%= producto.getStock() %>"
-				               data-impuesto="<%= producto.getImpuesto() %>"
-				               data-imagen="<%= producto.getImagen() %>"
-				               data-activo="<%= producto.isActivo() %>">Actualizar</a>
+				            <a href="#" class="actualizar-usuario"
+				               data-id="<%= usuario.getId() %>"
+				               data-id_rol="<%= usuario.getId_rol() %>"
+				               data-email="<%= usuario.getEmail() %>"
+				               data-clave="<%= usuario.getClave() %>"
+				               data-nombre="<%= usuario.getNombre() %>"
+				               data-apellido1="<%= usuario.getApellido1() %>"
+				               data-apellido2="<%= usuario.getApellido2() %>"
+				               data-direccion="<%= usuario.getDireccion() %>"
+				               data-provincia="<%= usuario.getProvincia()%>"
+				               data-localidad="<%= usuario.getLocalidad() %>"
+				               data-telefono="<%= usuario.getTelefono()%>"
+				               data-dni="<%= usuario.getDni() %>"
+				               data-activo="<%= usuario.isActivo() %>">Actualizar</a>
 				               			               
 				        <% } %>
 				    </td>
@@ -206,45 +216,62 @@
 <!-- Formulario de Actualización (oculto por defecto) -->
 <div id="formulario-actualizacion" style="display: none; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
 
-    <h2 style="margin-bottom: 20px;">Actualizar Producto</h2>
-    <form action="ModificarProducto" method="post">
+    <h2 style="margin-bottom: 20px;">Actualizar empleado</h2>
+    <form action="ModificarUsuario" method="post">
         <div style="margin-bottom: 10px;">
-        <input  type="hidden" id="idProducto" name="idProducto">
+        <input  type="hidden" id="idUsuario" name="idUsuario">
+        <% if(user.getId_rol() == 3){  %>
+	    <label for="id_rol">Rol:</label>
+	    <select class="form-control" id="id_rol" name="id_rol">
+	        <option value="3">Administrador</option>
+	        <option value="2">Empleado</option>
+	    </select>
+            <%} %>
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label for="clave">Clave:</label>
+            <input type="password" id="clave" name="clave" class="form-control">
+        </div>
+        <div style="margin-bottom: 10px;">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" class="form-control">
         </div>
         <div style="margin-bottom: 10px;">
-            <label for="precio">Precio:</label>
-            <input type="text" id="precio" name="precio" class="form-control">
+            <label for="apellido1">Primer apellido:</label>
+            <input type="text" id="apellido1" name="apellido1" class="form-control">
         </div>
         <div style="margin-bottom: 10px;">
-            <label for="idCategoria">Categoría:</label>
-            <select class="form-control" id="idCategoria" name="idCategoria">
-            	<option value="1">Perros</option>
-            	<option value="2">Gatos</option>
-	        	<option value="3">Otros animales</option>
-
-	    </select>
+            <label for="apellido2">Segundo apellido:</label>
+            <input type="text" id="apellido2" name="apellido2" class="form-control">
+        </div>
+		<div style="margin-bottom: 10px;">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" class="form-control">
         </div>
         <div style="margin-bottom: 10px;">
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" class="form-control" rows="5"></textarea>
+            <label for="provincia">Provincia:</label>
+            <input type="text" id="provincia" name="provincia" class="form-control">
         </div>
         <div style="margin-bottom: 10px;">
-            <label for="stock">Stock:</label>
-            <input type="number" id="stock" name="stock" class="form-control">
+            <label for="localidad">Localidad:</label>
+            <input type="text" id="localidad" name="localidad" class="form-control">
         </div>
         <div style="margin-bottom: 10px;">
-            <label for="impuesto">Impuesto:</label>
-            <input type="number" id="impuesto" name="impuesto" class="form-control">
+            <label for="telefono">Telefono:</label>
+            <input type="number" id="telefono" name="telefono" class="form-control">
         </div>
         <div style="margin-bottom: 10px;">
-            <label for="imagen">Imagen:</label>
-            <input type="text" id="imagen" name="imagen" class="form-control">
+            <label for="dni">DNI:</label>
+            <input type="text" id="dni" name="dni" class="form-control">
         </div>
+        
         <%
         // Aquí se comprueba el rol del usuario
-        int rolUsuario = usuario.getId_rol();
+        int rolUsuario = usuarioRol.getId_rol();
         if(rolUsuario == 3){ %>
             <div style="margin-bottom: 10px;">
             <label for="activo">Activo:</label>
@@ -274,29 +301,37 @@
         
 <script>
 $(document).ready(function() {
-    $('.actualizar-producto').on('click', function(e) {
+    $('.actualizar-usuario').on('click', function(e) {
         e.preventDefault();
-        var idProducto = $(this).data('id');
+        var idUsuario = $(this).data('id');
         
         // Obtener los datos del producto del atributo de datos personalizados
+        var id_rol = $(this).data('id_rol');
+        var email = $(this).data('email');
+        var clave = $(this).data('clave');
         var nombre = $(this).data('nombre');
-        var precio = $(this).data('precio');
-        var idCategoria = $(this).data('idcategoria');
-        var descripcion = $(this).data('descripcion');
-        var stock = $(this).data('stock');
-        var impuesto = $(this).data('impuesto');
-        var imagen = $(this).data('imagen');
+        var apellido1 = $(this).data('apellido1');
+        var apellido2 = $(this).data('apellido2');
+        var direccion = $(this).data('direccion');
+        var provincia = $(this).data('provincia');
+        var localidad = $(this).data('localidad');
+        var telefono = $(this).data('telefono');
+        var dni = $(this).data('dni');
         var activo = $(this).data('activo');
         
         // Rellenar el formulario con los datos del producto
-        $('#idProducto').val(idProducto);
+        $('#idUsuario').val(idUsuario);
+        $('#id_rol').val(id_rol);
+        $('#email').val(email);
+        $('#clave').val(clave);
         $('#nombre').val(nombre);
-        $('#precio').val(precio);
-        $('#idCategoria').val(idCategoria);
-        $('#descripcion').val(descripcion);
-        $('#stock').val(stock);
-        $('#impuesto').val(impuesto);
-        $('#imagen').val(imagen);
+        $('#apellido1').val(apellido1);
+        $('#apellido2').val(apellido2);
+        $('#direccion').val(direccion);
+        $('#provincia').val(provincia);
+        $('#localidad').val(localidad);
+        $('#telefono').val(telefono);
+        $('#dni').val(dni);
         $('#activo').prop('checked', activo);
         
 

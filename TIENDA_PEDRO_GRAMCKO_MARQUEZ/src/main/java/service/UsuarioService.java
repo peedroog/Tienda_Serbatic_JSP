@@ -41,6 +41,14 @@ public class UsuarioService {
 		return UsuarioDAO.findAll();
 	}
 	
+	public static List<UsuarioVO> findEmpleados(){
+		return UsuarioDAO.findEmpleados();
+	}
+	
+	public static List<UsuarioVO> findClientes(){
+		return UsuarioDAO.findClientes();
+	}
+	
 	public static boolean registrarUsuario(UsuarioVO usuario) {
 		return UsuarioDAO.registrarUsuario(usuario);
 	}

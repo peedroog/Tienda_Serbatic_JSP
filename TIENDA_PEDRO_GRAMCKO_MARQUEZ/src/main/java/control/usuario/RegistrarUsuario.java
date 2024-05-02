@@ -2,6 +2,8 @@ package control.usuario;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,6 +37,23 @@ public class RegistrarUsuario extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+	    String lang = request.getParameter("lang");
+	    
+
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
+		
 		request.getRequestDispatcher("/vistas/registro.jsp").forward(request, response);
 	}
 
@@ -45,10 +64,20 @@ public class RegistrarUsuario extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 	    UsuarioVO usuario = new UsuarioVO();
-
-	    usuario.setId_rol(1);
-	    usuario.setEmail((String) request.getParameter("email"));
+	    String email = request.getParameter("email");
 	    String clave =((String) request.getParameter("clave"));
+	    usuario.setId_rol(1);
+	    usuario.setEmail(email);
+	    
+	    
+	    // Realizar validaciones de datos
+	    if (email == null || email.isEmpty() || clave == null || clave.isEmpty()) {
+	        // Si alguno de los campos está vacío, mostrar un mensaje de error
+	        request.setAttribute("errorRegistro", "Por favor, completa todos los campos");
+	        request.getRequestDispatcher("/vistas/registro.jsp").forward(request, response);
+	        return;
+	    }
+	    
 	    StrongPasswordEncryptor encriptar = new StrongPasswordEncryptor();
 
 	    usuario.setClave(encriptar.encryptPassword(clave));
@@ -58,7 +87,6 @@ public class RegistrarUsuario extends HttpServlet {
 	            response.sendRedirect(request.getContextPath());
 	        } else {
 	            // El correo electrónico ya está registrado, mostrar mensaje de error
-	        	System.out.println("ERROR");
 	        	request.setAttribute("errorRegistro", "El correo electrónico ya está registrado");
 	            request.getRequestDispatcher("/vistas/registro.jsp").forward(request, response);
 	        }

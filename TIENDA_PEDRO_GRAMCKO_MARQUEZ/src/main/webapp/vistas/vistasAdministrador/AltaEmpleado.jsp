@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<%@ page import="model.VO.*, java.util.List, java.sql.Date" %> <!-- Importa la clase ProductoVO -->
+<%@ page import="model.VO.*, java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,6 +12,19 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="vistas/vistasAdministrador/indexEmpleado/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        
+        	<style>
+	
+		#formulario-actualizacion{
+		    width: 60%;
+    		margin: 0 auto;
+    		padding: 40px;
+    		}
+    	.form-group{
+    		margin-top: 10px;
+    	}
+	
+	</style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand">
@@ -101,8 +114,7 @@
 
 
                             
-                            
-                                  <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
+                                <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
                             <a class="nav-link" href="<%= request.getContextPath()%>/AdminEnviarPedido">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Procesar pedidos
@@ -146,169 +158,84 @@
             
             
 <main style="margin: 50px;">
-    <h1 class="display-4">Lista de Productos</h1>
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% 
-                List<ProductoVO> listaProductos = (List<ProductoVO>) request.getAttribute("listaProductos"); 
-                for (ProductoVO producto : listaProductos) {      
-                	
-                    
-                    // Aquí se comprueba el rol del usuario
 
-                    int rolUsuario = usuario.getId_rol();
-                %>
-				<tr>
-				    <td><%= producto.getId() %></td>
-				    <td><%= producto.getNombre() %></td>
-				    <td>
-				        <% if(rolUsuario == 2 || rolUsuario == 3) { %>
-				            <a href="#" class="actualizar-producto"
-				               data-id="<%= producto.getId() %>"
-				               data-nombre="<%= producto.getNombre() %>"
-				               data-precio="<%= producto.getPrecio() %>"
-				               data-idCategoria="<%= producto.getId_categoria() %>"
-				               data-descripcion="<%= producto.getDescripcion() %>"
-				               data-stock="<%= producto.getStock() %>"
-				               data-impuesto="<%= producto.getImpuesto() %>"
-				               data-imagen="<%= producto.getImagen() %>"
-				               data-activo="<%= producto.isActivo() %>">Actualizar</a>
-				               			               
-				        <% } %>
-				    </td>
-				</tr>
-                <% } %>
-            </tbody>
-        </table>
+<div id="mensaje">
+    <% 
+    String mensaje = (String) request.getAttribute("mensaje");
+    if (mensaje != null) { 
+    %>
+    <div class="alert alert-success" role="alert">
+        <%= mensaje %>
     </div>
-    
-        <div id="mensaje">
-        <% 
-        String mensaje = (String) request.getAttribute("mensaje");
-        if (mensaje != null && !mensaje.isEmpty()) { 
-        %>
-        <div class="alert alert-success" role="alert">
-            <%= mensaje %>
-        </div>
-        <% } %>
-    </div>
-    
-<hr style="width: 100%; margin-top: 30px; margin-bottom: 30px;">    
-    
-<!-- Formulario de Actualización (oculto por defecto) -->
-<div id="formulario-actualizacion" style="display: none; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
-
-    <h2 style="margin-bottom: 20px;">Actualizar Producto</h2>
-    <form action="ModificarProducto" method="post">
-        <div style="margin-bottom: 10px;">
-        <input  type="hidden" id="idProducto" name="idProducto">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="precio">Precio:</label>
-            <input type="text" id="precio" name="precio" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="idCategoria">Categoría:</label>
-            <select class="form-control" id="idCategoria" name="idCategoria">
-            	<option value="1">Perros</option>
-            	<option value="2">Gatos</option>
-	        	<option value="3">Otros animales</option>
-
-	    </select>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" class="form-control" rows="5"></textarea>
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="stock">Stock:</label>
-            <input type="number" id="stock" name="stock" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="impuesto">Impuesto:</label>
-            <input type="number" id="impuesto" name="impuesto" class="form-control">
-        </div>
-        <div style="margin-bottom: 10px;">
-            <label for="imagen">Imagen:</label>
-            <input type="text" id="imagen" name="imagen" class="form-control">
-        </div>
-        <%
-        // Aquí se comprueba el rol del usuario
-        int rolUsuario = usuario.getId_rol();
-        if(rolUsuario == 3){ %>
-            <div style="margin-bottom: 10px;">
-            <label for="activo">Activo:</label>
-            <input type="checkbox" id="activo" name="activo" class="form-check-input">
-        </div>
-        <% } %>
-				            	   
-
-        <button type="submit" class="btn btn-primary" style="width: 100%; margin: auto;">Guardar</button>
-    </form>
+    <% } %>
 </div>
+	
+	<div id="formulario-actualizacion" style="padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
+    <h2>Dar de alta un empleado</h2>
+<form action="AltaEmpleado" method="post">
+    <input type="hidden" id="idUsuario" name="idUsuario">
+	<div class="form-group">
+	    <label for="id_rol">Rol:</label>
+	    <select class="form-control" id="id_rol" name="id_rol">
+	        <option value="3">Administrador</option>
+	        <option value="2">Empleado</option>
+	    </select>
+	</div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" name="email">
+    </div>
+    <div class="form-group">
+        <label for="clave">Clave:</label>
+        <input type="password" class="form-control" id="clave" name="clave">
+    </div>
+    <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" class="form-control" id="nombre" name="nombre">
+    </div>
+    <div class="form-group">
+        <label for="apellido1">Apellido 1:</label>
+        <input type="text" class="form-control" id="apellido1" name="apellido1">
+    </div>
+    <div class="form-group">
+        <label for="apellido2">Apellido 2:</label>
+        <input type="text" class="form-control" id="apellido2" name="apellido2">
+    </div>
+    <div class="form-group">
+        <label for="direccion">Dirección:</label>
+        <input type="text" class="form-control" id="direccion" name="direccion">
+    </div>
+    <div class="form-group">
+        <label for="provincia">Provincia:</label>
+        <input type="text" class="form-control" id="provincia" name="provincia">
+    </div>
+    <div class="form-group">
+        <label for="localidad">Localidad:</label>
+        <input type="text" class="form-control" id="localidad" name="localidad">
+    </div>
+    <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input type="text" class="form-control" id="telefono" name="telefono">
+    </div>
+    <div class="form-group">
+        <label for="dni">DNI:</label>
+        <input type="text" class="form-control" id="dni" name="dni">
+    </div>
+    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Guardar</button>
+</form>
 
-
-
-
+</div>
+	
 </main>
 
 
 
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="vistas/vistasAdministrador/indexEmpleado/js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        
-<script>
-$(document).ready(function() {
-    $('.actualizar-producto').on('click', function(e) {
-        e.preventDefault();
-        var idProducto = $(this).data('id');
-        
-        // Obtener los datos del producto del atributo de datos personalizados
-        var nombre = $(this).data('nombre');
-        var precio = $(this).data('precio');
-        var idCategoria = $(this).data('idcategoria');
-        var descripcion = $(this).data('descripcion');
-        var stock = $(this).data('stock');
-        var impuesto = $(this).data('impuesto');
-        var imagen = $(this).data('imagen');
-        var activo = $(this).data('activo');
-        
-        // Rellenar el formulario con los datos del producto
-        $('#idProducto').val(idProducto);
-        $('#nombre').val(nombre);
-        $('#precio').val(precio);
-        $('#idCategoria').val(idCategoria);
-        $('#descripcion').val(descripcion);
-        $('#stock').val(stock);
-        $('#impuesto').val(impuesto);
-        $('#imagen').val(imagen);
-        $('#activo').prop('checked', activo);
-        
-
-        
-        // Mostrar el formulario
-        $('#formulario-actualizacion').show();
-    });
-});
-</script>
-
-
-
     </body>
 </html>
 

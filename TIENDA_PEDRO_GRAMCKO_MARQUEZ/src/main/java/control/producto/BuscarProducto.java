@@ -2,6 +2,8 @@ package control.producto;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,6 +39,23 @@ public class BuscarProducto extends HttpServlet {
         // Realizar la búsqueda de productos por nombre
         List<ProductoVO> productos = ProductoService.buscarProductosPorNombre(searchText);
 
+	    String lang = request.getParameter("lang");
+	    
+
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
+        
         // Agregar los productos encontrados al request
         request.setAttribute("listaBuscar", productos);
 

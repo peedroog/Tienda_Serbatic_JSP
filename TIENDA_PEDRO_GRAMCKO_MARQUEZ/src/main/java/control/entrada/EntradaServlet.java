@@ -3,6 +3,8 @@ package control.entrada;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,7 +50,23 @@ public class EntradaServlet extends HttpServlet {
 		// Recuperar los datos (Productos)
 		List<ProductoVO> lista = ProductoDAO.findAll();
 
+	    String lang = request.getParameter("lang");
+	    
 
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
+		
 		request.setAttribute("catalogo", lista);
 		
 		if(request.getAttribute("listaBuscar") != null) {
@@ -72,8 +90,8 @@ public class EntradaServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+
+		
 	}
 
 }

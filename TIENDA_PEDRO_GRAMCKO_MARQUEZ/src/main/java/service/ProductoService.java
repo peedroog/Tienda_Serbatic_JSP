@@ -3,11 +3,15 @@ package service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import model.DAO.ProductoDAO;
 import model.VO.CategoriaVO;
 import model.VO.ProductoVO;
 
 public class ProductoService {
+	private static final Logger logger = LogManager.getLogger(ProductoService.class);
 
 	public static CategoriaVO devuelveCategoriaProducto(int id) {
 		
@@ -24,7 +28,9 @@ public class ProductoService {
 		if(ProductoDAO.actualizaStock(producto)) {
 			return true;
 		}
+		logger.error("");
 		return false;
+		
 	}
 	
 	public static ProductoVO findById(int id) {

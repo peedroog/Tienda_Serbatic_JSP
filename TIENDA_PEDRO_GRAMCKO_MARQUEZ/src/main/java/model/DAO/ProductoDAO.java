@@ -69,9 +69,9 @@ public class ProductoDAO {
 				producto.setPrecio(rs.getDouble("precio"));
 				producto.setStock(rs.getInt("stock"));
 				producto.setFecha_alta(rs.getDate("fecha_alta"));
-				producto.setFecha_baja(rs.getDate("fecha_baja"));
 				producto.setImpuesto(rs.getFloat("impuesto"));
 				producto.setImagen(rs.getString("imagen"));
+				producto.setActivo(rs.getBoolean("activo"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -173,6 +173,7 @@ public class ProductoDAO {
 				producto.setStock(rs.getInt("stock"));
 				producto.setImpuesto(rs.getFloat("impuesto"));
 				producto.setImagen(rs.getString("imagen"));
+				producto.setActivo(rs.getBoolean("activo"));
 				productos.add(producto);
 
 			}
@@ -204,6 +205,7 @@ public class ProductoDAO {
 				producto.setStock(rs.getInt("stock"));
 				producto.setImpuesto(rs.getFloat("impuesto"));
 				producto.setImagen(rs.getString("imagen"));
+				producto.setActivo(rs.getBoolean("activo"));
 				productos.add(producto);
 			}
 		} catch (SQLException e) {
@@ -234,6 +236,7 @@ public class ProductoDAO {
 				producto.setStock(rs.getInt("stock"));
 				producto.setImpuesto(rs.getFloat("impuesto"));
 				producto.setImagen(rs.getString("imagen"));
+				producto.setActivo(rs.getBoolean("activo"));
 				productos.add(producto);
 			}
 		} catch (SQLException e) {
@@ -265,6 +268,7 @@ public class ProductoDAO {
 				producto.setStock(rs.getInt("stock"));
 				producto.setImpuesto(rs.getFloat("impuesto"));
 				producto.setImagen(rs.getString("imagen"));
+				producto.setActivo(rs.getBoolean("activo"));
 				productos.add(producto);
 			}
 		} catch (SQLException e) {

@@ -32,6 +32,8 @@ public class AltaCategoria extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		
+		
 		request.getRequestDispatcher("vistas/vistasAdministrador/AltaCategoria.jsp").forward(request, response);
 	}
 

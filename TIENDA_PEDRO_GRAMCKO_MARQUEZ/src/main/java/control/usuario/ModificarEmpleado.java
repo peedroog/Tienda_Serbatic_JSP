@@ -11,22 +11,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
-import model.VO.ProductoVO;
 import model.VO.UsuarioVO;
-import service.ProductoService;
 import service.UsuarioService;
 
 /**
- * Servlet implementation class ModificarUsuario
+ * Servlet implementation class ModificarEmpleado
  */
-@WebServlet("/ModificarUsuario")
-public class ModificarUsuario extends HttpServlet {
+@WebServlet("/ModificarEmpleado")
+public class ModificarEmpleado extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ModificarUsuario() {
+    public ModificarEmpleado() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,11 +34,11 @@ public class ModificarUsuario extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		List<UsuarioVO> listaUsuarios = UsuarioService.findClientes();
+		List<UsuarioVO> listaUsuarios = UsuarioService.findEmpleados();
 		
 		request.setAttribute("listaUsuarios", listaUsuarios);
 		
-		request.getRequestDispatcher("vistas/vistasAdministrador/ModificarUsuario.jsp").forward(request, response);
+		request.getRequestDispatcher("vistas/vistasAdministrador/ModificarEmpleado.jsp").forward(request, response);
 	}
 
 	/**
@@ -86,15 +84,13 @@ public class ModificarUsuario extends HttpServlet {
 
 	    if (resultado) {
 	        // Usuario añadido correctamente
-	        request.setAttribute("mensaje", "El usuario se ha modificado correctamente.");
+	        request.setAttribute("mensaje", "El empleado se ha modificado correctamente.");
 	    } else {
 	        // Error al añadir el usuario
-	        request.setAttribute("mensaje", "Hubo un error al modificar el usuario.");
+	        request.setAttribute("mensaje", "Hubo un error al modificar el empleado.");
 	    }
 	    
-	    response.sendRedirect(request.getContextPath() + "/ModificarUsuario");
+	    response.sendRedirect(request.getContextPath() + "/ModificarEmpleado");
 	}
-
-
 
 }

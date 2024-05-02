@@ -22,40 +22,46 @@
 <header>
 	<jsp:include page="/vistas/header/header.jsp" />
 </header>
-<body>
 
+
+
+
+
+<body>
+<% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
 <div class="toggle-btn" id="toggleBtn">
-  <span>&#9776 Todas las categorías</span>
+  <button class="btn btn-primary btn-block" style="font-size: 20px;"><%=rb.getString("Categorias") %></button>
 </div>
-    
+
 <div id="myModal" class="contenedor-modal">
     <div class="contenido-modal">
         <!-- Contenido del modal -->
         <span class="close">&times;</span>
-        <p>Categorías</p>
+        <p><%=rb.getString("Categoria") %></p>
         <!-- Separador -->
         <hr style="border-color: #ccc; border: 1px solid;">
         <ul class="lista-categorias">
 			<li>
-			    <a href="CategoriasProducto?categoria=Perros"><b>Perros</b></a>
+			    <a href="CategoriasProducto?categoria=Perros"><b><%=rb.getString("Perros") %></b></a>
 			</li>
 			<li>
-			    <a href="CategoriasProducto?categoria=Gatos"><b>Gatos</b></a>
+			    <a href="CategoriasProducto?categoria=Gatos"><b><%=rb.getString("Gatos") %></b></a>
 			</li>
 			<li>
-			    <a href="CategoriasProducto?categoria=Otros%20animales"><b>Otros animales</b></a>
+			    <a href="CategoriasProducto?categoria=Otros%20animales"><b><%=rb.getString("Otros") %></b></a>
 			</li>
         </ul>
     </div>
-</div>
+</div>  
+
 
 <div class="container" style="margin-top: 50px; margin-bottom: 50px">
-    <h1 class="mt-4 text-center" style="margin-bottom: 25px;">Catálogo</h1>
+    <h1 class="mt-4 text-center" style="margin-bottom: 25px;"><%=rb.getString("Catalogo") %></h1>
     
     <form class="col-12 col-lg-auto me-lg-auto search-form" role="search" action="BuscarProducto" method="GET">
-        <input type="search" class="form-control" placeholder="Buscar..." aria-label="Buscar" name="searchText">
+        <input type="search" class="form-control" placeholder="<%=rb.getString("Buscar1") %>" aria-label="Buscar" name="searchText">
         <!-- Aquí puedes agregar más campos de búsqueda como precio, categoría, etc. -->
-        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="submit" class="btn btn-primary"><%=rb.getString("Buscar2") %></button>
     </form>
     
     	    <!-- Separador -->
@@ -65,25 +71,25 @@
 	    <!-- Botón para ordenar por Precio más bajo -->
 	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
 	        <input type="hidden" name="orderBy" value="precioAsc">
-	        <button type="submit" class="btn-filtro">Precio más bajo</button>
+	        <button type="submit" class="btn-filtro"><%=rb.getString("Precio.bajo") %></button>
 	    </form>
 	
 	    <!-- Botón para ordenar por Precio más alto -->
 	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
 	        <input type="hidden" name="orderBy" value="precioDesc">
-	        <button type="submit" class="btn-filtro">Precio más alto</button>
+	        <button type="submit" class="btn-filtro"><%=rb.getString("Precio.alto") %></button>
 	    </form>
 	
 	    <!-- Botón para ordenar por Más comprados -->
 	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
 	        <input type="hidden" name="orderBy" value="masComprados">
-	        <button type="submit" class="btn-filtro">Más comprados</button>
+	        <button type="submit" class="btn-filtro"><%=rb.getString("Mas.comprados") %></button>
 	    </form>
 
 	    <!-- Botón para ordenar por Mejor valorados -->
 	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
 	        <input type="hidden" name="orderBy" value="mejorValorados">
-	        <button type="submit" class="btn-filtro">Mejor valorados</button>
+	        <button type="submit" class="btn-filtro"><%=rb.getString("Mejor.valorados") %></button>
 	    </form>
 	</div>
     
@@ -102,7 +108,7 @@
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         
         for (ProductoVO producto : catalogo) {
-        	
+
         	if(producto.isActivo()){
         		CategoriaVO categoria = CategoriaService.findById(producto.getId_categoria());
         	
@@ -133,8 +139,7 @@
 						</p>
 						<form action="ComprarServlet" method="GET">
 							<input type="hidden" name="id" value="<%=producto.getId()%>">
-							<button type="submit" class="btn btn-primary btn-block">Añadir
-								a carrito</button>
+							<button type="submit" class="btn btn-primary btn-block"><%=rb.getString("Añadir.carrito") %></button>
 						</form>
 					</div>
 
@@ -147,7 +152,7 @@
 				role="dialog" aria-labelledby="detalleProductoModalLabel"
 				aria-hidden="true">
 				<div class="modal-dialog modal-lg" role="document">
-					<div class="modal-content">
+					<div class="modal-content" id="modal-content">
 						<div class="modal-header">
 							<h5 class="modal-title" id="detalleProductoModalLabel"><%=producto.getNombre()%></h5>
 							<button type="button" class="close" data-dismiss="modal"
@@ -177,8 +182,7 @@
 						<div class="modal-footer">
 							<form action="ComprarServlet" method="GET">
 								<input type="hidden" name="id" value="<%=producto.getId()%>">
-								<button type="submit" class="btn btn-primary btn-block btn-añadir"><b>Añadir
-									a carrito</b></button>
+								<button type="submit" class="btn btn-primary btn-block btn-añadir"><b><%=rb.getString("Añadir.carrito") %></b></button>
 							</form>
 						</div>
 					</div>
@@ -187,6 +191,7 @@
         
         <% }
         }%>
+
     </div>
 
 <nav aria-label="Page navigation">
@@ -210,6 +215,7 @@
 			});
 		});
 	</script>
+
 <script>
 //Obtener el modal
 var modal = document.getElementById("myModal");
@@ -222,12 +228,14 @@ var span = document.getElementsByClassName("close")[0];
 
 // Cuando se hace clic en el botón, mostrar el modal
 btn.onclick = function() {
-  modal.style.display = "block";
+  	modal.style.display = "block";
+
 }
 
 // Cuando se hace clic en <span> (x), ocultar el modal
 span.onclick = function() {
   modal.style.display = "none";
+
 }
 
 // Cuando el usuario hace clic en cualquier parte fuera del modal, ocultarlo
@@ -240,7 +248,6 @@ window.onclick = function(event) {
 
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.1/tailwind.min.css"></script>
 </body>
 <footer>
 	<jsp:include page="/vistas/footer/footer.jsp" />

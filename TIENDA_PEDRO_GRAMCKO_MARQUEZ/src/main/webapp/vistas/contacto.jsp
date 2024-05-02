@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,9 +13,11 @@
 <jsp:include page="/vistas/header/header.jsp"></jsp:include>
 </header>
 <body>
+			<% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
+<a class="hidden" href="<%=request.getContextPath() %>?lang=en"></a>
     <div class="container" style="margin-top: 50px; margin-bottom: 50px">
         <h1 class="mt-5">Formulario de Contacto</h1>
-        <form action="procesar_consulta.jsp" method="post">
+        <form action="<%=request.getContextPath() %>/Contacto" method="post">
             <div class="form-group">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" class="form-control" required>

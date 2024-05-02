@@ -1,6 +1,9 @@
 package control.cuenta;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,6 +40,23 @@ public class CambiarContraseña extends HttpServlet {
 	    String currentPassword = request.getParameter("currentPassword");
 	    String newPassword = request.getParameter("password"); // Obtener la nueva contraseña del parámetro en la URL
 	    UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
+	    
+	    String lang = request.getParameter("lang");
+	    
+
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
 
 	    // Verificar si la contraseña actual es correcta
 	    if (encriptar.checkPassword(currentPassword, usuario.getClave())) {

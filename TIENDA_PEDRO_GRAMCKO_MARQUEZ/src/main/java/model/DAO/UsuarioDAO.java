@@ -85,6 +85,72 @@ public class UsuarioDAO {
 		return lista;
 
 	}
+	
+	public static List<UsuarioVO> findEmpleados() {
+
+		List<UsuarioVO> lista = new ArrayList<UsuarioVO>();
+
+		try {
+				Connection con = Conexion.getConexion();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM usuarios WHERE id_rol = 2 OR id_rol = 3");
+				ResultSet rs = st.executeQuery(); 
+
+			while (rs.next()) {
+				UsuarioVO usuario = new UsuarioVO();
+
+				usuario.setId(rs.getInt("id"));
+				usuario.setId_rol(rs.getInt("id_rol"));
+				usuario.setEmail(rs.getString("email"));
+				usuario.setNombre(rs.getString("nombre"));
+				usuario.setApellido1(rs.getString("apellido1"));
+				usuario.setApellido2(rs.getString("apellido2"));
+				usuario.setDireccion(rs.getString("direccion"));
+				usuario.setProvincia(rs.getString("provincia"));
+				usuario.setLocalidad(rs.getString("localidad"));
+				usuario.setTelefono(rs.getString("telefono"));
+				usuario.setDni(rs.getString("dni"));
+				usuario.setActivo(rs.getBoolean("activo"));
+				lista.add(usuario);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+
+	}
+	
+	public static List<UsuarioVO> findClientes() {
+
+		List<UsuarioVO> lista = new ArrayList<UsuarioVO>();
+
+		try {
+				Connection con = Conexion.getConexion();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM usuarios WHERE id_rol = 1");
+				ResultSet rs = st.executeQuery(); 
+
+			while (rs.next()) {
+				UsuarioVO usuario = new UsuarioVO();
+
+				usuario.setId(rs.getInt("id"));
+				usuario.setId_rol(rs.getInt("id_rol"));
+				usuario.setEmail(rs.getString("email"));
+				usuario.setNombre(rs.getString("nombre"));
+				usuario.setApellido1(rs.getString("apellido1"));
+				usuario.setApellido2(rs.getString("apellido2"));
+				usuario.setDireccion(rs.getString("direccion"));
+				usuario.setProvincia(rs.getString("provincia"));
+				usuario.setLocalidad(rs.getString("localidad"));
+				usuario.setTelefono(rs.getString("telefono"));
+				usuario.setDni(rs.getString("dni"));
+				usuario.setActivo(rs.getBoolean("activo"));
+				lista.add(usuario);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return lista;
+
+	}
 
 	private static boolean emailExistente(String email) throws SQLException {
 		Connection connection = null;

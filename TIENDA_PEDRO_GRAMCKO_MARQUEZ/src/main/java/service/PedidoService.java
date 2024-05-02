@@ -28,12 +28,12 @@ public class PedidoService {
 		return PedidoDAO.obtenerPedidosPorUsuario(usuario);
 	}
 	
-	public static List<PedidoVO> filtrarFechaAsc(UsuarioVO usuario){
-		return PedidoDAO.filtrarPedidoAsc(usuario);
-	}
-	
 	public static List<PedidoVO> filtrarFechaDesc(UsuarioVO usuario){
 		return PedidoDAO.filtrarPedidoDesc(usuario);
+	}
+	
+	public static List<PedidoVO> filtrarFechaAsc(UsuarioVO usuario){
+		return PedidoDAO.filtrarPedidoAsc(usuario);
 	}
 
 	public static boolean cancelarPedido(int pedidoId) {

@@ -11,35 +11,62 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
 
-        <form action="<%=request.getContextPath() %>" method="get">
+        <form action="<%=request.getContextPath()%>" method="get">
             <button type="submit" style="background-color: #012d25; border: none;">
                 <jsp:include page="/svg/svgLogo.jsp"></jsp:include>
             </button>
         </form>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-            	<form action="<%=request.getContextPath() %>" method="get">
+                    	<form action="<%=request.getContextPath()%>" method="get">
             		<button type="submit" style="background-color: #012d25; border: none;">
             			<img src="img/HappyPets.png" style="width: 160px; margin-left: 5px;">
             		</button>			
 				</form>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+
 			<div class="opciones-menu">
-									        <li class="nav-item">
-            <a class="nav-link" href="#">Inicio</a>
+		<li class="nav-item">
+			<% 
+			ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");
+			if(rb == null){
+				Locale locale = new Locale("es");
+				rb = ResourceBundle.getBundle("idioma", locale);
+			}
+			%>
+            <a class="nav-link" href="<%= request.getContextPath()%>"><%=rb.getString("Inicio") %></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Nosotros</a>
+            <a class="nav-link" href=""><%=rb.getString("Nosotros") %></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Contacto</a>
+            <a class="nav-link" href="<%= request.getContextPath()%>/Contacto"><%=rb.getString("Contacto") %></a>
         </li>
 			</div>
+			
+			
 
             </ul>
 		
 
             <div class="login-cart">
+				            
+				<div class="nav-item dropdown">
+				    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						    <% if ("en".equals((String)request.getAttribute("languaje"))) { %>
+						    <jsp:include page="/svg/svgIngles.jsp"></jsp:include>						        
+						    <% } else { %>
+						        <jsp:include page="/svg/svgEspaña.jsp"></jsp:include>
+						    <% } %>
+				    </a>
+				    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+				        <!-- Formulario para cambiar a Español -->
+				        <li><a class="dropdown-item" style="color: black !important;" href="<%=request.getContextPath() %>?lang=es"><%=rb.getString("Español") %></a></li>
+				
+				        <!-- Formulario para cambiar a Inglés -->
+				        <li><a class="dropdown-item" style="color: black !important;" href="<%=request.getContextPath() %>?lang=en"><%=rb.getString("Ingles") %></a></li>
+				    </ul>
+				</div>
 
                 <form action="<%=request.getContextPath()%>/Carrito" method="GET">
 
@@ -76,17 +103,13 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <form action="MisDatos" method="GET">
-                            <li><button type="submit" class="dropdown-item">Mis	datos</button></li>
+                            <li><button type="submit" class="dropdown-item"><%=rb.getString("Mis.datos") %></button></li>
                         </form>
                         <form action="MisPedidos" method="GET">
-                            <li><button type="submit" class="dropdown-item">Mis pedidos</button></li>
-                        </form>
-                        <form action="Contacto" method="GET">
-                            <li><button type="submit" class="dropdown-item">Contacto</button></li>
+                            <li><button type="submit" class="dropdown-item"><%=rb.getString("Mis.pedidos") %></button></li>
                         </form>
                         <form action="<%=request.getContextPath()%>/CerrarSesion" method="POST">
-                            <li><button type="submit" class="dropdown-item">Cerrar
-                                    sesión</button></li>
+                            <li><button type="submit" class="dropdown-item"><%=rb.getString("Cerrar.sesion") %></button></li>
                         </form>
                     </ul></div>
                 <%
@@ -100,7 +123,7 @@
                 </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <form action="<%=request.getContextPath()%>/Login" method="GET">
-                            <li><button type="submit" class="dropdown-item">Iniciar	sesión</button></li>
+                            <li><button type="submit" class="dropdown-item"><%=rb.getString("Iniciar.sesion") %></button></li>
                         </form>
                     </ul></div>
                 <%

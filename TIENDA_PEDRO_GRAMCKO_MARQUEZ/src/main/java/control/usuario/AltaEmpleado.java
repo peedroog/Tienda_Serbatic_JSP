@@ -9,42 +9,40 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
-import model.DAO.UsuarioDAO;
+import com.google.protobuf.TextFormatParseInfoTree;
+
 import model.VO.UsuarioVO;
 import service.UsuarioService;
 
 /**
- * Servlet implementation class AltaUsuario
+ * Servlet implementation class AltaEmpleado
  */
-@WebServlet("/AltaUsuario")
-public class AltaUsuario extends HttpServlet {
+@WebServlet("/AltaEmpleado")
+public class AltaEmpleado extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public AltaEmpleado() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 
 	/**
-	 * @see HttpServlet#HttpServlet()
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	public AltaUsuario() {
-		super();
-		// TODO Auto-generated constructor stub
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		request.getRequestDispatcher("vistas/vistasAdministrador/AltaEmpleado.jsp").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		request.getRequestDispatcher("vistas/vistasAdministrador/AltaUsuario.jsp").forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Obtener los parámetros del formulario
+		int id_rol = Integer.parseInt(request.getParameter("id_rol"));
 		String email = request.getParameter("email");
 		String clave = request.getParameter("clave");
 		String nombre = request.getParameter("nombre");
@@ -58,7 +56,7 @@ public class AltaUsuario extends HttpServlet {
 
 		// Crear un objeto UsuarioVO con los datos obtenidos
 		UsuarioVO usuario = new UsuarioVO();
-		usuario.setId_rol(1);
+		usuario.setId_rol(id_rol);
 		usuario.setEmail(email);
 		usuario.setNombre(nombre);
 		usuario.setApellido1(apellido1);
@@ -73,13 +71,12 @@ public class AltaUsuario extends HttpServlet {
 
 		usuario.setClave(encriptar.encryptPassword(clave));
 		if (UsuarioService.registrarUsuario(usuario)) {
-			request.setAttribute("mensaje", "El usuario se ha dado de alta correctamente.");
+			request.setAttribute("mensaje", "El empleado se ha dado de alta correctamente.");
 		} else {
-			request.setAttribute("mensaje", "Hubo un error al dar de alta el usuario.");
+			request.setAttribute("mensaje", "Hubo un error al dar de alta el emnpleado.");
 		}
 
-		request.getRequestDispatcher("vistas/vistasAdministrador/AltaUsuario.jsp").forward(request, response);
-
+		request.getRequestDispatcher("vistas/vistasAdministrador/AltaEmpleado.jsp").forward(request, response);
 	}
 
 }

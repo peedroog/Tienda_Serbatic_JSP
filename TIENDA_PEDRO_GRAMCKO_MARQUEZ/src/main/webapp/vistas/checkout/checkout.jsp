@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
+    pageEncoding="UTF-8" import="java.util.*"%>
 <!doctype html>
 <html lang="es" data-bs-theme="auto">
   <head>
@@ -113,7 +113,8 @@ String provincia = (String) request.getAttribute("provincia");
 String localidad = (String) request.getAttribute("localidad");
 %>
 
-
+			<% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
+<a class="hidden" href="<%=request.getContextPath() %>?lang=en"></a>
     <div align="center" class="container">
 
         <div class="py-5 text-center">
@@ -128,7 +129,7 @@ String localidad = (String) request.getAttribute("localidad");
 
               <div class="col-sm-12">
                 <label for="telefono" class="form-label">Telefono</label>
-                <input type="tel" class="form-control" id="telefono"  value="<%=telefono %>" required disabled>
+                <input type="number" class="form-control" id="telefono"  value="<%=telefono %>" required disabled>
                 <div class="invalid-feedback">
                   Please enter your phone number.
                 </div>

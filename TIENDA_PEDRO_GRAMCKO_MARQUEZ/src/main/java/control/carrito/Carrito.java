@@ -3,13 +3,19 @@ package control.carrito;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import model.DAO.CarritoDAO;
 import model.VO.ProductoVO;
@@ -21,6 +27,8 @@ import service.ProductoService;
 @WebServlet("/Carrito")
 public class Carrito extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = LogManager.getLogger(ProductoService.class);
+	
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -44,6 +52,23 @@ public class Carrito extends HttpServlet {
 		// Calcular el total del carrito
 		double precio = CarritoDAO.devuelvePrecioCarrito(carrito);
 		request.setAttribute("precioTotal", decimalFormat.format(precio));
+		
+	    String lang = request.getParameter("lang");
+	    
+
+	    Locale locale;
+	    ResourceBundle idiomas;
+	    if (lang != null && !lang.isEmpty()) {
+	        locale = new Locale(lang);
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    } else {
+	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
+	        locale = new Locale("es"); // Español como idioma predeterminado
+	        idiomas = ResourceBundle.getBundle("idioma", locale);
+	    }
+
+	    request.setAttribute("languaje", lang);
+	    request.setAttribute("idiomas", idiomas);
 
 	    if (!"/RellenarDatosUsuario".equals(request.getServletPath())) {
 	        request.getSession().setAttribute("ultimaRuta", request.getRequestURI() + "?" + request.getQueryString());
@@ -75,8 +100,11 @@ public class Carrito extends HttpServlet {
 				double nuevoPrecio = CarritoDAO.devuelvePrecioCarrito(carrito);
 
 				// Actualizar los atributos "precioTotal" y "precioTotalConIVA" en el request
+
 				request.setAttribute("precioTotal", decimalFormat.format(nuevoPrecio));
 				erroresStock.add("No hay suficiente stock para el producto '" + producto.getNombre());
+				logger.error(erroresStock);
+				
 			}
 		}
 

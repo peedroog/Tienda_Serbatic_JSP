@@ -80,7 +80,7 @@ public class AdminEnviarPedido extends HttpServlet {
         boolean exito = PedidoService.enviarPedidoAdmin(pedidoId);
         
         if (exito) {
-        	request.getSession().setAttribute("mensajeExito", "El pedido se envío correctamente.");
+        	request.getSession().setAttribute("mensajeExito", "El pedido se envió correctamente.");
         } else {
         	request.getSession().setAttribute("mensajeError", "Error al envíar el pedido. Por favor, inténtelo de nuevo.");
         }

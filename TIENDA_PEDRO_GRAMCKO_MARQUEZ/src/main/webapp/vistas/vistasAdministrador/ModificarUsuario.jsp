@@ -12,7 +12,10 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="vistas/vistasAdministrador/indexEmpleado/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+	
     </head>
+    
+
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand">
             <!-- Navbar Brand-->
@@ -54,7 +57,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Inicio</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="<%= request.getContextPath()%>/Admin">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Estadísticas
                             </a>
@@ -102,20 +105,28 @@
 
                             
                             
-                            <div class="sb-sidenav-menu-heading">Pedidos y cancelaciones</div>
+                                <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
                             <a class="nav-link" href="<%= request.getContextPath()%>/AdminEnviarPedido">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Procesar pedidos
                             </a>
                             
+                            
+                            <div class="sb-sidenav-menu-heading">Empleados</div>
                             <% UsuarioVO usuarioRol = (UsuarioVO) request.getSession().getAttribute("usuario");
                     		if(usuarioRol.getId_rol() == 3){%>
                     			       
-                    		<div class="sb-sidenav-menu-heading">Empleados</div>	           		
-                            <a class="nav-link" href="<%= request.getContextPath()%>/AdminCancelarPedido">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Dar de alta a empleado
-                            </a>
+							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsEmpleados" aria-expanded="false" aria-controls="collapseLayoutsEmpleados">
+							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+							    Gestionar empleados
+							    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapseLayoutsEmpleados" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							    <nav class="sb-sidenav-menu-nested nav">
+							        <a class="nav-link" href="<%= request.getContextPath()%>/AltaEmpleado">Dar de alta</a>
+							        <a class="nav-link" href="<%= request.getContextPath()%>/ModificarEmpleado">Actualizar</a>
+							    </nav>
+							</div>
                             
                             <% } %>
                         </div>
@@ -138,7 +149,7 @@
             
             
 <main style="margin: 50px;">
-    <h1 class="display-4">Lista de Usuarios</h1>
+    <h1 class="display-4">Lista de clientes</h1>
     <div class="table-responsive">
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
@@ -158,6 +169,7 @@
                     
                 	user = (UsuarioVO) request.getSession().getAttribute("usuario");
                     int rolUsuario = user.getId_rol();
+                    
                 %>
 				<tr>
 				    <td><%= usuario.getId() %></td>
@@ -199,15 +211,23 @@
         <% } %>
     </div>
     
+<hr style="width: 100%; margin-top: 30px; margin-bottom: 30px;">    
+    
 <!-- Formulario de Actualización (oculto por defecto) -->
 <div id="formulario-actualizacion" style="display: none; padding: 20px; border: 1px solid #ccc; background-color: #f9f9f9;">
 
-    <h2 style="margin-bottom: 20px;">Actualizar Producto</h2>
+    <h2 style="margin-bottom: 20px;">Actualizar cliente</h2>
     <form action="ModificarUsuario" method="post">
         <div style="margin-bottom: 10px;">
         <input  type="hidden" id="idUsuario" name="idUsuario">
-            <label for="id_rol">ID Rol:</label>
-            <input type="text" id="id_rol" name="id_rol" class="form-control">
+        <% if(user.getId_rol() == 3){  %>
+	    <label for="id_rol">Rol:</label>
+	    <select class="form-control" id="id_rol" name="id_rol">
+	        <option value="3">Administrador</option>
+	        <option value="2">Empleado</option>
+	        <option value="1">Cliente</option>
+	    </select>
+            <%} %>
         </div>
         <div style="margin-bottom: 10px;">
             <label for="email">Email:</label>
@@ -261,7 +281,7 @@
         <% } %>
 				            	   
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin: auto;">Guardar</button>
     </form>
 </div>
 
