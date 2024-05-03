@@ -118,7 +118,7 @@ String localidad = (String) request.getAttribute("localidad");
     <div align="center" class="container">
 
         <div class="py-5 text-center">
-          <img class="d-block mx-auto mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+
           <h2>Finaliza la compra</h2>
         </div>
 
@@ -173,9 +173,12 @@ String localidad = (String) request.getAttribute("localidad");
 
             <hr class="my-4">
 
-            <h4 class="mb-3">Métodos de pago</h4>
-
-                <!-- Opciones de método de pago -->
+            
+				<div class="contenedor-pagos">
+				
+				<img alt="" src="img/4C8QsKX.png" style="width: 40%" >
+				<h4 class="mb-3">Métodos de pago</h4>
+				<!-- Opciones de método de pago -->
                 <div class="my-3">
                     <div class="form-check">
                         <input id="credit" name="paymentMethod" type="radio" class="form-check-input" value="tarjeta" checked required>
@@ -201,7 +204,7 @@ String localidad = (String) request.getAttribute("localidad");
 
                         <div class="col-md-6">
                             <label for="cc-number" class="form-label">Número de tarjeta</label>
-                            <input type="text" class="form-control" id="cc-number" placeholder="" required>
+                            <input type="number" class="form-control" id="cc-number" placeholder="" required>
                             <div class="invalid-feedback">
                                 Credit card number is required
                             </div>
@@ -209,7 +212,7 @@ String localidad = (String) request.getAttribute("localidad");
 
                         <div class="col-md-3">
                             <label for="cc-expiration" class="form-label">Expiration</label>
-                            <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
+                            <input type="number" class="form-control" id="cc-expiration" placeholder="" required>
                             <div class="invalid-feedback">
                                 Expiration date required
                             </div>
@@ -217,7 +220,7 @@ String localidad = (String) request.getAttribute("localidad");
 
                         <div class="col-md-3">
                             <label for="cc-cvv" class="form-label">CVV</label>
-                            <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                            <input type="password" class="form-control" id="cc-cvv" placeholder="" required>
                             <div class="invalid-feedback">
                                 Security code required
                             </div>
@@ -245,12 +248,16 @@ String localidad = (String) request.getAttribute("localidad");
                         </div>
                     </div>
                 </div>
+				
+				
+				</div>
+                
 
             <hr class="my-4">
             
 			<form action="<%= request.getContextPath() %>/FinalizarCompra" method="POST">
 				<input type="hidden" id="selectedPaymentMethod" name="selectedPaymentMethod">
-				<button class="w-100 btn btn-primary btn-lg" type="submit">Tramitar pedido</button>
+				<button class="w-100 btn btn-primary btn-lg btn-finalizar" type="submit">Tramitar pedido</button>
 			</form>
             
 
@@ -261,22 +268,22 @@ String localidad = (String) request.getAttribute("localidad");
 
 <script>
     // Función para mostrar u ocultar los campos relevantes según la opción seleccionada
-    function mostrarOcultarCampos() {
-        var metodoPago = document.querySelector('input[name="paymentMethod"]:checked').value;
+function mostrarOcultarCampos() {
+    var metodoPago = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-        // Ocultar todos los campos primero
-        document.getElementById("datosTarjeta").style.display = "none";
-        document.getElementById("datosPaypal").style.display = "none";
+    // Ocultar todos los campos primero
+    document.getElementById("datosTarjeta").style.display = "none";
+    document.getElementById("datosPaypal").style.display = "none";
 
-        // Mostrar los campos relevantes según la opción seleccionada
-        if (metodoPago === "credit") {
-            document.getElementById("datosTarjeta").style.display = "block";
-        } else if (metodoPago === "paypal") {
-            document.getElementById("datosPaypal").style.display = "block";
-        }
-        
-        document.getElementById("selectedPaymentMethod").value = metodoPago;
+    // Mostrar los campos relevantes según la opción seleccionada
+    if (metodoPago === "tarjeta") {
+        document.getElementById("datosTarjeta").style.display = "block";
+    } else if (metodoPago === "paypal") {
+        document.getElementById("datosPaypal").style.display = "block";
     }
+    
+    document.getElementById("selectedPaymentMethod").value = metodoPago;
+}
 
     // Agregar un event listener para el cambio en la selección de método de pago
     var radios = document.querySelectorAll('input[name="paymentMethod"]');

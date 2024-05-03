@@ -16,30 +16,33 @@
 <body>
 			<% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
 <a class="hidden" href="<%=request.getContextPath() %>?lang=en"></a>
-<div class="container login-container">
-    <h1 class="mt-4">Iniciar sesión</h1>
-    
+<div class="container login-container d-flex justify-content-center align-items-center">
+    <div class="text-center">
+        <h1 class="mt-4">Iniciar sesión</h1>
+        
         <!-- Div para mostrar el mensaje de error -->
-    <div id="errorInicioSesion" class="alert alert-danger d-none" role="alert">
-        <!-- Aquí se mostrará el mensaje de error -->
-    </div>
-    
+        <div id="errorInicioSesion" class="alert alert-danger d-none" role="alert">
+            <!-- Aquí se mostrará el mensaje de error -->
+        </div>
+        
 
-    <form method="post" action="Login" class="mt-4">
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label for="clave">Contraseña:</label>
-            <input type="password" class="form-control" id="clave" name="clave" required>
-        </div>
-        <button type="submit" class="btn btn-primary" name="login">Iniciar sesión</button>
-    </form>
-    <form action="RegistrarUsuario" method="get">
-    	<button type="submit" class="btn btn-success my-3" name="login">Registrarme</button>
-    </form>
-    
+        <form method="post" action="Login" class="mt-4">
+            <div class="form-group row">
+                <div class="col">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col">
+                    <input type="password" class="form-control" id="clave" name="clave" placeholder="Contraseña" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" name="login">Iniciar sesión</button>
+        </form>
+        <form action="RegistrarUsuario" method="get">
+            <button type="submit" class="btn btn-success my-3" name="login">Registrarme</button>
+        </form>
+    </div>
 </div>
 
 

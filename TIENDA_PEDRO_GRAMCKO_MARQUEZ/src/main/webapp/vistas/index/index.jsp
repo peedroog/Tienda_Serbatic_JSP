@@ -64,146 +64,136 @@
         <button type="submit" class="btn btn-primary"><%=rb.getString("Buscar2") %></button>
     </form>
     
-    	    <!-- Separador -->
-	    <hr style="border: 1px solid gray;">
+    <!-- Separador -->
+    <hr style="border: 1px solid gray;">
     
-	 <div class="text-center mt-4">
-	    <!-- Botón para ordenar por Precio más bajo -->
-	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
-	        <input type="hidden" name="orderBy" value="precioAsc">
-	        <button type="submit" class="btn-filtro"><%=rb.getString("Precio.bajo") %></button>
-	    </form>
-	
-	    <!-- Botón para ordenar por Precio más alto -->
-	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
-	        <input type="hidden" name="orderBy" value="precioDesc">
-	        <button type="submit" class="btn-filtro"><%=rb.getString("Precio.alto") %></button>
-	    </form>
-	
-	    <!-- Botón para ordenar por Más comprados -->
-	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
-	        <input type="hidden" name="orderBy" value="masComprados">
-	        <button type="submit" class="btn-filtro"><%=rb.getString("Mas.comprados") %></button>
-	    </form>
+    <div class="text-center mt-4">
+        <!-- Botón para ordenar por Precio más bajo -->
+        <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
+            <input type="hidden" name="orderBy" value="precioAsc">
+            <button type="submit" class="btn-filtro"><%=rb.getString("Precio.bajo") %></button>
+        </form>
+    
+        <!-- Botón para ordenar por Precio más alto -->
+        <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
+            <input type="hidden" name="orderBy" value="precioDesc">
+            <button type="submit" class="btn-filtro"><%=rb.getString("Precio.alto") %></button>
+        </form>
+    
+        <!-- Botón para ordenar por Más comprados -->
+        <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
+            <input type="hidden" name="orderBy" value="masComprados">
+            <button type="submit" class="btn-filtro"><%=rb.getString("Mas.comprados") %></button>
+        </form>
 
-	    <!-- Botón para ordenar por Mejor valorados -->
-	    <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
-	        <input type="hidden" name="orderBy" value="mejorValorados">
-	        <button type="submit" class="btn-filtro"><%=rb.getString("Mejor.valorados") %></button>
-	    </form>
-	</div>
+        <!-- Botón para ordenar por Mejor valorados -->
+        <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
+            <input type="hidden" name="orderBy" value="mejorValorados">
+            <button type="submit" class="btn-filtro"><%=rb.getString("Mejor.valorados") %></button>
+        </form>
+    </div>
     
-        	    <!-- Separador -->
-	    <hr style="border: 1px solid gray; margin-bottom: 50px">
+    <!-- Separador -->
+    <hr style="border: 1px solid gray; margin-bottom: 50px">
     
     <div class="row">
         <% 
-        List<ProductoVO> catalogo = (List<ProductoVO>) request.getAttribute("catalogo");
-        int pageSize = 9; // Número máximo de productos por página (3 filas de 3 productos)
-		int totalPages = (int) Math.ceil((double) catalogo.size() / pageSize);
-		String pageParam = request.getParameter("page");
-		int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
-		int startIndex = (currentPage - 1) * pageSize;
-		int endIndex = Math.min(startIndex + pageSize, catalogo.size());
+        List<ProductoVO> catalogo = (List<ProductoVO>) request.getAttribute("catalogo"); 
+        // Parámetros de paginación
+        int pageSize = 9; // Número máximo de productos por página
+        int totalProducts = catalogo.size(); // Total de productos
+        int totalPages = (int) Math.ceil((double) totalProducts / pageSize); // Calcular el número total de páginas
+        String pageParam = request.getParameter("page"); // Obtener el número de página actual
+        int currentPage = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1; // Página actual (por defecto es 1)
+        int startIndex = (currentPage - 1) * pageSize; // Índice inicial del producto en la página actual
+        int endIndex = Math.min(startIndex + pageSize, totalProducts); // Índice final del producto en la página actual
+        
+        // Obtener los productos de la página actual
+        List<ProductoVO> productosPagina = catalogo.subList(startIndex, endIndex);
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         
-        for (ProductoVO producto : catalogo) {
-
-        	if(producto.isActivo()){
-        		CategoriaVO categoria = CategoriaService.findById(producto.getId_categoria());
-        	
-            
+        for (ProductoVO producto : productosPagina) {
+            if (producto.isActivo()) {
+                CategoriaVO categoria = CategoriaService.findById(producto.getId_categoria());
         %>
         <div class="col-12 col-md-4">
-				<div class="product-card"
-					style="background: url(<%=producto.getImagen()%>)">
-					<div class="overlay">
-						<h5 class="card-title product-name"><%=producto.getNombre()%>
-							<svg data-toggle="modal"
-								data-target="#detalleProductoModal<%=producto.getId()%>"
-								xmlns="http://www.w3.org/2000/svg"
-								xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256"
-								width="50px" height="50px">
-								<g fill="#ffffff" fill-rule="nonzero" stroke="none"
-									stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
-									stroke-miterlimit="10" stroke-dasharray=""
-									stroke-dashoffset="0" font-family="none" font-weight="none"
-									font-size="none" text-anchor="none"
-									style="mix-blend-mode: normal">
-								<g transform="scale(5.12,5.12)">
-								<path
-									d="M25,2c-12.6907,0 -23,10.3093 -23,23c0,12.69071 10.3093,23 23,23c12.69071,0 23,-10.30929 23,-23c0,-12.6907 -10.30929,-23 -23,-23zM25,4c11.60982,0 21,9.39018 21,21c0,11.60982 -9.39018,21 -21,21c-11.60982,0 -21,-9.39018 -21,-21c0,-11.60982 9.39018,-21 21,-21zM25,11c-1.65685,0 -3,1.34315 -3,3c0,1.65685 1.34315,3 3,3c1.65685,0 3,-1.34315 3,-3c0,-1.65685 -1.34315,-3 -3,-3zM21,21v2h1h1v13h-1h-1v2h1h1h4h1h1v-2h-1h-1v-15h-1h-4z"></path></g></g></svg>
-						</h5>
-						<p class="card-text text-white">
-							Precio:	<%= decimalFormat.format(producto.getPrecio() * (1 + (producto.getImpuesto() / 100.0))) %><b>€</b>
-						</p>
-						<form action="ComprarServlet" method="GET">
-							<input type="hidden" name="id" value="<%=producto.getId()%>">
-							<button type="submit" class="btn btn-primary btn-block"><%=rb.getString("Añadir.carrito") %></button>
-						</form>
-					</div>
-
-				</div>
+            <div class="product-card" style="background: url(<%=producto.getImagen()%>)">
+                <div class="overlay">
+                    <h5 class="card-title product-name"><%=producto.getNombre()%>
+						<svg data-toggle="modal" data-target="#detalleProductoModal<%=producto.getId()%>" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256" width="50px" height="50px"> <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"> <g transform="scale(5.12,5.12)"> <path d="M25,2c-12.6907,0 -23,10.3093 -23,23c0,12.69071 10.3093,23 23,23c12.69071,0 23,-10.30929 23,-23c0,-12.6907 -10.30929,-23 -23,-23zM25,4c11.60982,0 21,9.39018 21,21c0,11.60982 -9.39018,21 -21,21c-11.60982,0 -21,-9.39018 -21,-21c0,-11.60982 9.39018,-21 21,-21zM25,11c-1.65685,0 -3,1.34315 -3,3c0,1.65685 1.34315,3 3,3c1.65685,0 3,-1.34315 3,-3c0,-1.65685 -1.34315,-3 -3,-3zM21,21v2h1h1v13h-1h-1v2h1h1h4h1h1v-2h-1h-1v-15h-1h-4z"></path></g></g></svg>
+                    </h5>
+                    <p class="card-text text-white">
+                        Precio: <%= decimalFormat.format(producto.getPrecio() * (1 + (producto.getImpuesto() / 100.0))) %><b>€</b>
+                    </p>
+                    <form action="ComprarServlet" method="GET">
+                        <input type="hidden" name="id" value="<%=producto.getId()%>">
+                        <button type="submit" class="btn btn-primary btn-block"><%=rb.getString("Añadir.carrito") %></button>
+                    </form>
+                </div>
+            </div>
         </div>
-        
-<!-- Modal para mostrar detalles del producto -->
-			<div class="modal fade"
-				id="detalleProductoModal<%=producto.getId()%>" tabindex="-1"
-				role="dialog" aria-labelledby="detalleProductoModalLabel"
-				aria-hidden="true">
-				<div class="modal-dialog modal-lg" role="document">
-					<div class="modal-content" id="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="detalleProductoModalLabel"><%=producto.getNombre()%></h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-md-8">
-										<strong>Nombre de categoría:</strong>
-										<%=categoria.getNombre()%></p>
-									<p>
-										<strong>Descripción: </strong>
-										<%=producto.getDescripcion()%></p>
-									<p>
-										<strong>Precio:</strong>
-										<%= decimalFormat.format(producto.getPrecio() * (1 + (producto.getImpuesto() / 100.0))) %>€</p>
 
-								</div>
-								<div class="col-md-4">
-									<img src="<%=producto.getImagen()%>" class="img-fluid"
-										alt="<%=producto.getNombre()%>">
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<form action="ComprarServlet" method="GET">
-								<input type="hidden" name="id" value="<%=producto.getId()%>">
-								<button type="submit" class="btn btn-primary btn-block btn-añadir"><b><%=rb.getString("Añadir.carrito") %></b></button>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-        
-        <% }
-        }%>
+        <!-- Modal para mostrar detalles del producto -->
+        <div class="modal fade" id="detalleProductoModal<%=producto.getId()%>" tabindex="-1" role="dialog" aria-labelledby="detalleProductoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" id="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detalleProductoModalLabel"><%=producto.getNombre()%></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p>
+                                    <strong>Nombre de categoría:</strong>
+                                    <%=categoria.getNombre()%></p>
+                                <p>
+                                    <strong>Descripción: </strong>
+                                    <%=producto.getDescripcion()%></p>
+                                <p>
+                                    <strong>Precio:</strong>
+                                    <%= decimalFormat.format(producto.getPrecio() * (1 + (producto.getImpuesto() / 100.0))) %>€</p>
 
+                            </div>
+                            <div class="col-md-4">
+                                <img src="<%=producto.getImagen()%>" class="img-fluid" alt="<%=producto.getNombre()%>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="ComprarServlet" method="GET">
+                            <input type="hidden" name="id" value="<%=producto.getId()%>">
+                            <button type="submit" class="btn btn-primary btn-block btn-añadir"><b><%=rb.getString("Añadir.carrito") %></b></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% 
+            } // Cierre del if
+        } // Cierre del for
+        %>
     </div>
 
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center">
-        <% for (int i = 1; i <= totalPages; i++) { %>
-            <li class="page-item <%=(i == currentPage) ? "active" : ""%>">
-                <a class="page-link" href="?page=<%=i%>"><%=i%></a>
-            </li>
-        <% } %>
-    </ul>
-</nav>
+    <!-- Paginación -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <% for (int i = 1; i <= totalPages; i++) { %>
+                <li class="page-item <%= (i == currentPage) ? "active" : "" %>">
+                    <a class="page-link" href="?page=<%=i%>"><%=i%></a>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
 </div>
+
+
+
+
+
+
 	<!-- Bootstrap JS (opcional, si necesitas funcionalidad JS de Bootstrap) -->
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

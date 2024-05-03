@@ -12,7 +12,7 @@
 <jsp:include page="/vistas/header/header.jsp"/>
 </header>
 <body>
-<div class="container" style="margin-top: 50px; margin-bottom: 50px">
+<div class="container" style="margin-top: 50px; margin-bottom: 50px; min-height: 55vh;">
     <h1 class="mt-4">Registro</h1>
 
     <!-- Div para mostrar el mensaje de error -->

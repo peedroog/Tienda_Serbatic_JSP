@@ -11,11 +11,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 import model.DAO.ProductoDAO;
-import model.VO.CategoriaVO;
 import model.VO.ProductoVO;
-import service.CategoriaService;
+
 
 /**
  * Servlet implementation class EntradaServlet
@@ -31,6 +32,13 @@ public class EntradaServlet extends HttpServlet {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+//    @Override
+//    public void init() throws ServletException {
+//        // Registra ManagerSesiones como un HttpSessionListener
+//        getServletContext().addListener(new ManagerSesiones());
+//    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -43,11 +51,12 @@ public class EntradaServlet extends HttpServlet {
 		String pagina = "/vistas/index/index.jsp";
 
 		if (request.getSession().getAttribute("carrito") == null) {
+			
 			request.getSession().setAttribute("carrito", new HashMap<Integer, Integer>());
 			System.out.println("carrito disponible");
 		}
 
-		// Recuperar los datos (Productos)
+
 		List<ProductoVO> lista = ProductoDAO.findAll();
 
 	    String lang = request.getParameter("lang");
@@ -59,8 +68,8 @@ public class EntradaServlet extends HttpServlet {
 	        locale = new Locale(lang);
 	        idiomas = ResourceBundle.getBundle("idioma", locale);
 	    } else {
-	        // Establecer un idioma predeterminado si no se ha seleccionado ninguno
-	        locale = new Locale("es"); // Español como idioma predeterminado
+
+	        locale = new Locale("es");
 	        idiomas = ResourceBundle.getBundle("idioma", locale);
 	    }
 
@@ -93,5 +102,6 @@ public class EntradaServlet extends HttpServlet {
 
 		
 	}
+	
 
 }

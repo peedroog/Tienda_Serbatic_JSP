@@ -24,7 +24,7 @@
     <%@ include file="/vistas/header/header.jsp" %>
 </header>
 <body>
-    <div class="container" style="margin-top: 50px; margin-bottom: 50px">
+    <div class="container" style="margin-top: 50px; margin-bottom: 50px; min-height: 55vh;">
         <h1 class="mt-4 text-center">Lista de Pedidos</h1>
         
          <!-- Separador -->

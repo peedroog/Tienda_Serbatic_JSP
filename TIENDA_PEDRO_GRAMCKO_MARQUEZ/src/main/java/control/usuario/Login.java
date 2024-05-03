@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -15,14 +16,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
 
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import conexion.Conexion;
 import model.DAO.UsuarioDAO;
+import model.VO.PedidoVO;
 import model.VO.ProductoVO;
 import model.VO.UsuarioVO;
+import service.PedidoService;
 import service.UsuarioService;
+import hilos.*;
 
 /**
  * Servlet implementation class LoginServlet
@@ -76,6 +81,7 @@ public class Login extends HttpServlet {
 		    String clave = request.getParameter("clave");
 		    request.getSession().setAttribute("email", email);
 		    StrongPasswordEncryptor encriptar = new StrongPasswordEncryptor();
+
 		    
 
 
@@ -83,7 +89,13 @@ public class Login extends HttpServlet {
 		    if (usuario != null && encriptar.checkPassword(clave, usuario.getClave())) {
 		        // Verificar si el usuario no es nulo primero antes de verificar la contraseña
 		        request.getSession().setAttribute("usuario", usuario);
-		        System.out.println("Sesión iniciada");
+		        
+
+		        
+		        // Iniciar el hilo si la sesión es nula
+		        if (!EnviarPedidos.isRunning()) {
+		            EnviarPedidos.startThread();
+		        }
 		        
 		        // Verificar el id_rol del usuario y redirigir según su rol
 		        switch (usuario.getId_rol()) {
@@ -114,14 +126,16 @@ public class Login extends HttpServlet {
 		                break;
 		        }
 		    } else {
-		        // Si el usuario no existe o la contraseña es incorrecta, configuramos un atributo de solicitud para indicar el error.
+		        
+		        if (EnviarPedidos.isRunning()) {
+		            EnviarPedidos.stopThread();
+		        }
 		        request.setAttribute("errorInicioSesion", "El usuario o la contraseña son incorrectos");
 		        request.getRequestDispatcher("/vistas/login/login.jsp").forward(request, response);
 		    }
 		}
 
 
-
-
-
 }
+
+

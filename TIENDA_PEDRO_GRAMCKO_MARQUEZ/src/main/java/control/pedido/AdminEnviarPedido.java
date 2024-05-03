@@ -17,6 +17,7 @@ import model.VO.UsuarioVO;
 import service.DetallePedidoService;
 import service.PedidoService;
 import service.ProductoService;
+import service.UsuarioService;
 
 /**
  * Servlet implementation class AdminEnviarPedido
@@ -74,10 +75,26 @@ public class AdminEnviarPedido extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    boolean exito = false;
+	    int pedidoId = Integer.parseInt(request.getParameter("pedidoId"));
 		
-		int pedidoId = Integer.parseInt(request.getParameter("pedidoId"));
+
+	    PedidoVO pedido = PedidoService.devuelvePedido(pedidoId);
+
+	    
+	    // Verificar si el pedido existe y tiene el estado correcto para enviar el correo
+	    if (pedido != null && pedido.getEstado().equals("Pendiente de envío")) {
+	        // Obtener el usuario asociado al pedido
+	        UsuarioVO usuario = UsuarioService.findById(pedido.getId_usuario());
+	        // Enviar el correo electrónico para este pedido y usuario
+	        boolean enviado = PedidoService.enviarPedidoAdmin(pedido, usuario);
+	        if (enviado) {
+	            // Si se envió correctamente, establecer éxito en verdadero
+	            exito = true;
+	        }
+	    }
 		
-        boolean exito = PedidoService.enviarPedidoAdmin(pedidoId);
+        
         
         if (exito) {
         	request.getSession().setAttribute("mensajeExito", "El pedido se envió correctamente.");

@@ -8,9 +8,10 @@
 <!-- Bootstrap CSS -->
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
 
-	<div class="container" style="margin-top: 50px; margin-bottom: 50px">
+	<div class="container" style="margin-top: 50px; margin-bottom: 50px; min-height: 55vh !important;">
     <h1 class="mt-4">Tus datos</h1>
     <form method="post" action="RellenarDatosUsuario" class="mt-4">
     <% UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario"); %>

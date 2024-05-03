@@ -315,5 +315,29 @@ public class PedidoDAO {
 		    
 		    return exito;
 		}
+	   
+	   public static boolean enviarPedidoHilo(int id) {
+	        Connection con = null;
+	        PreparedStatement ps = null;
+
+	        boolean exito = false;
+	        
+	        try {
+	            con = Conexion.getConexion();
+	            ps = con.prepareStatement("UPDATE pedidos SET estado = 'Enviado' WHERE id = ?");
+	            ps.setInt(1, id);
+
+	            int filas = ps.executeUpdate();
+
+	            if (filas > 0) {
+	            	exito = true;
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }        
+
+	        return exito;
+	   }
 
 }

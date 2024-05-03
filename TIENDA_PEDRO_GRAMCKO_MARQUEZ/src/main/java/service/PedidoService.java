@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 import java.util.Map;
 
+import mail.EnviarCorreo;
 import model.DAO.PedidoDAO;
 import model.VO.PedidoVO;
 import model.VO.ProductoVO;
@@ -40,12 +41,18 @@ public class PedidoService {
 		return PedidoDAO.cancelarPedido(pedidoId);
 	}
 	
-	public static boolean enviarPedidoAdmin(int id) {
-		return PedidoDAO.enviarPedidoAdmin(id);
+	public static boolean enviarPedidoAdmin(PedidoVO pedido, UsuarioVO usuario) {
+		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
+		return PedidoDAO.enviarPedidoAdmin(pedido.getId());
 	}
 	
 	public static boolean cancelarPedidoAdmin(int id) {
 		return PedidoDAO.cancelarPedidoAdmin(id);
+	}
+	
+	public static boolean enviarPedidoHilo(PedidoVO pedido, UsuarioVO usuario) {
+		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
+		return PedidoDAO.enviarPedidoHilo(pedido.getId());
 	}
 	
 }

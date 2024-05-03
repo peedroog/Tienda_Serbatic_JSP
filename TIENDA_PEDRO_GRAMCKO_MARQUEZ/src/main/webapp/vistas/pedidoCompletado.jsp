@@ -15,7 +15,7 @@
 <body>
 			<% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
 <a class="hidden" href="<%=request.getContextPath() %>?lang=en"></a>
-<div class="container" style="margin-top: 50px; margin-bottom: 50px">
+<div class="container" style="margin-top: 50px; margin-bottom: 50px; min-height: 55vh">
     <div class="row mt-5">
         <div class="col-md-12 text-center">
             <h1 class="display-4">Pedido realizado con éxito</h1>
@@ -40,9 +40,14 @@
                     <!-- Puedes agregar más detalles del pedido aquí -->
                 </tbody>
             </table>
-            <form action="<%= request.getContextPath() %>" method="GET">
-                <button type="submit" class="btn btn-primary">Volver al menú principal</button>
-            </form>
+			    <div class="text-center">
+			        <form action="<%= request.getContextPath() %>" method="GET" class="d-inline">
+			            <button type="submit" class="btn btn-primary">Volver al menú principal</button>
+			        </form>
+			        <form action="<%= request.getContextPath() %>/MisPedidos" method="GET" class="d-inline">
+			            <button type="submit" class="btn btn-primary">Mis pedidos</button>
+			        </form>
+			    </div>
         </div>
     </div>
 </div>

@@ -6,6 +6,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSessionEvent;
+
+import hilos.EnviarPedidos;
 
 /**
  * Servlet implementation class CerrarSesion
@@ -36,12 +39,15 @@ public class CerrarSesion extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Obtenemos la sesión actual
          request.getSession(false);
-        
+
         if (request.getSession() != null) {
             // Invalidamos la sesión
         	request.getSession().invalidate();
+
         }
-        
+        if (EnviarPedidos.isRunning()) {
+            EnviarPedidos.stopThread();
+        }
         // Redirigimos al usuario a la página de inicio o a donde prefieras
         response.sendRedirect(request.getContextPath());
 	}

@@ -1,3 +1,32 @@
-.container {
-  
+.col-lg-8{
+	width: 40% !important;
+}
+
+.btn-primary{
+	margin-top: 25px !important;
+	width: 60%;
+}
+
+.contenedor-pagos{
+	background: #012d25;
+	color: white;
+	padding: 50px;
+	border-radius: 10px;
+}
+
+h4{
+	font-size: 37px;
+}
+.my-3{
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.btn-finalizar{
+	margin-bottom: 25px;
+}
+
+img{
+	width: 40%;
+    margin-bottom: 40px;
 }

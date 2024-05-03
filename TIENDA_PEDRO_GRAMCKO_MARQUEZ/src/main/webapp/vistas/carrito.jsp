@@ -12,9 +12,11 @@
 <header>
 <jsp:include page="/vistas/header/header.jsp"/>
 </header>
+
+</head>
 <body>
 
-<div class="container" style="margin-top: 50px; margin-bottom: 50px">
+<div class="container" style="margin-top: 50px; margin-bottom: 50px; min-height: 55vh">
     <h1 class="mt-4">CARRITO</h1>
 
 <!-- Mostrar todos los mensajes de error -->
@@ -51,13 +53,17 @@ if (errorCarritoVacio != null && !errorCarritoVacio.isEmpty()) {
             ProductoVO producto = entry.getKey();
             Integer cantidad = entry.getValue();
     %>
-    <div class="card my-3">
-        <div class="card-body">
+<div class="card my-3">
+    <div class="card-body d-flex align-items-center justify-content-between">
+        <div>
             <h5 class="card-title">Producto: <%= producto.getNombre() %></h5>
             <h6 class="card-subtitle mb-2 text-muted">Cantidad: <%= cantidad %></h6>
-    
+            <h6 class="card-subtitle mb-2 text-muted">Precio: <%= producto.getPrecio()%>€</h6>
+        </div>
+        
+        <div class="d-flex">
             <!-- Formulario para actualizar la cantidad -->
-            <form action="<%= request.getContextPath() %>/ActualizarCantidad" method="post">
+            <form action="<%= request.getContextPath() %>/ActualizarCantidad" method="post" class="me-2">
                 <input type="hidden" name="productId" value="<%= producto.getId() %>">
                 <input type="number" name="cantidad" value="<%= cantidad %>" min="1" max="99">
                 <button type="submit" class="btn btn-primary">Actualizar cantidad</button>
@@ -70,6 +76,7 @@ if (errorCarritoVacio != null && !errorCarritoVacio.isEmpty()) {
             </form>
         </div>
     </div>
+</div>
     <%
         }
     } else {
@@ -78,7 +85,7 @@ if (errorCarritoVacio != null && !errorCarritoVacio.isEmpty()) {
     <%
     }
     %>
-	<h1>Precio sin IVA: 
+	<h1>Precio (IVA incluído): 
 	    <% 
 	        Object precioTotal = request.getAttribute("precioTotal");
 	        if (precioTotal != null) {
@@ -88,16 +95,7 @@ if (errorCarritoVacio != null && !errorCarritoVacio.isEmpty()) {
 	        }
 	    %><b>€</b>
 	</h1>
-	<h1>Precio con IVA: 
-	    <% 
-	        Object precioTotalConIVA = request.getAttribute("precioTotalConIVA");
-	        if (precioTotalConIVA != null) {
-	            out.print(precioTotalConIVA);
-	        } else {
-	            out.print("0");
-	        }
-	    %><b>€</b>
-	</h1>
+
     <a href="<%=request.getContextPath() %>" class="btn btn-primary my-3">Seguir comprando</a>
     <a id="finalizarCompraBtn" href="<%= request.getContextPath() %>/ComprobarDatosEnvio" class="btn btn-success my-3">Finalizar compra</a>
 

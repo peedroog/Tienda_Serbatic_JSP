@@ -3,3 +3,14 @@
 	margin-top: 50px;
 	margin-bottom: 50px;
 }
+
+.form-group{
+	margin-bottom: 0;
+	width: 350px;
+	
+}
+
+.btn{
+	width: 60% !important;
+	margin-top: 25px !important;
+}

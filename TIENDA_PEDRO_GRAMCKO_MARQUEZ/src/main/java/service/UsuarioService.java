@@ -16,7 +16,7 @@ public class UsuarioService {
 	
 	public static UsuarioVO iniciarSesion(String email, String clave) {
 	    // Obtener el usuario por su correo electrónico
-	    UsuarioVO usuario = UsuarioDAO.obtenerUsuario(email);
+	    UsuarioVO usuario = UsuarioDAO.devolverUsuario(email);
 	    
 	    // Verificar si se encontró un usuario con el correo electrónico proporcionado
 	    if(usuario != null) {
@@ -75,8 +75,12 @@ public class UsuarioService {
 	public static UsuarioVO devuelveUsuario(String email) {
 		
 		UsuarioVO usuario = new UsuarioVO();
-		usuario = UsuarioDAO.obtenerUsuario(email);
+		usuario = UsuarioDAO.devolverUsuario(email);
 		return usuario;
+	}
+	
+	public static UsuarioVO findById(int id) {
+		return UsuarioDAO.findById(id);
 	}
 	
 	public static boolean cambiarContraseña(UsuarioVO usuario) {

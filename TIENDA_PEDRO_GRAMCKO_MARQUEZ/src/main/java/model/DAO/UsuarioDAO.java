@@ -205,7 +205,7 @@ public class UsuarioDAO {
 		return true;
 	}
 
-	public static UsuarioVO obtenerUsuario(String email) {
+	public static UsuarioVO devolverUsuario(String email) {
 		UsuarioVO usuario = null;
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -216,6 +216,44 @@ public class UsuarioDAO {
 			String sql = "SELECT * FROM usuarios WHERE email = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, email);
+			rs = stmt.executeQuery();
+
+			if (rs.next()) {
+
+				usuario = new UsuarioVO();
+				usuario.setId(rs.getInt("id"));
+				usuario.setId_rol(rs.getInt("id_rol"));
+				usuario.setEmail(rs.getString("email"));
+				usuario.setClave(rs.getString("clave"));
+				usuario.setNombre(rs.getString("nombre"));
+				usuario.setApellido1(rs.getString("apellido1"));
+				usuario.setApellido2(rs.getString("apellido2"));
+				usuario.setDireccion(rs.getString("direccion"));
+				usuario.setProvincia(rs.getString("provincia"));
+				usuario.setLocalidad(rs.getString("localidad"));
+				usuario.setTelefono(rs.getString("telefono"));
+				usuario.setDni(rs.getString("dni"));
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			// Manejar la excepción según tus necesidades
+		}
+
+		return usuario;
+	}
+	
+	public static UsuarioVO findById(int id) {
+		UsuarioVO usuario = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = Conexion.getConexion();
+			String sql = "SELECT * FROM usuarios WHERE id = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 
 			if (rs.next()) {

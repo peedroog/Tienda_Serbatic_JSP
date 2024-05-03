@@ -3,6 +3,7 @@ package control.carrito;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -167,8 +168,8 @@ public class FinalizarCompra extends HttpServlet {
 
 		request.setAttribute("idPedido", datosPedido.getId());
 		request.setAttribute("fechaPedido", datosPedido.getFecha());
-		request.setAttribute("total", datosPedido.getTotal());
-
+		request.setAttribute("total", datosPedido.getTotal());		
+		
 		carrito.clear();
 		request.getSession().setAttribute("carrito", carrito);
 		request.getRequestDispatcher("/vistas/pedidoCompletado.jsp").forward(request, response);
@@ -176,3 +177,4 @@ public class FinalizarCompra extends HttpServlet {
 	}
 
 }
+
