@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 import java.util.Map;
 
+import factura.CrearFactura;
 import mail.EnviarCorreo;
 import model.DAO.PedidoDAO;
 import model.VO.PedidoVO;
@@ -42,7 +43,8 @@ public class PedidoService {
 	}
 	
 	public static boolean enviarPedidoAdmin(PedidoVO pedido, UsuarioVO usuario) {
-		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
+//		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
+		CrearFactura.generarFactura(pedido, usuario);
 		return PedidoDAO.enviarPedidoAdmin(pedido.getId());
 	}
 	
@@ -51,7 +53,8 @@ public class PedidoService {
 	}
 	
 	public static boolean enviarPedidoHilo(PedidoVO pedido, UsuarioVO usuario) {
-		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
+//		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
+		CrearFactura.generarFactura(pedido, usuario);
 		return PedidoDAO.enviarPedidoHilo(pedido.getId());
 	}
 	

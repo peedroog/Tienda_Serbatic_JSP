@@ -22,16 +22,13 @@ public class CarritoDAO {
 
 			try {
 				Connection con = Conexion.getConexion();
-				PreparedStatement st = con.prepareStatement("SELECT precio, impuesto FROM productos WHERE id = ?");
+				PreparedStatement st = con.prepareStatement("SELECT precio FROM productos WHERE id = ?");
 				st.setInt(1, producto.getId());
 				ResultSet rs = st.executeQuery();
 
 				if (rs.next()) {
 	                double precio = rs.getDouble("precio");
-	                float impuestoPorcentaje = rs.getFloat("impuesto");
-	                double impuestoDecimal = impuestoPorcentaje / 100; // Convertir el impuesto a decimal
-	                double precioConImpuesto = precio * (1 + impuestoDecimal); // Aplicar el impuesto al precio
-	                precioTotal += precioConImpuesto * cantidad; // Calcular el precio total considerando la cantidad
+	                precioTotal += precio*cantidad;
 				} else {
 					System.out.println("No se encontró el precio para el artículo con ID: " + producto.getId());
 				}

@@ -156,9 +156,9 @@
 							    %>
 							    <tr>
 							        <td><%= nombreProducto %></td>
-							        <td><%= decimalFormat.format(linea.getPrecio_unidad() * (1 + (linea.getImpuesto() / 100.0))) %>€</td>
+							        <td><%= decimalFormat.format(linea.getPrecio_unidad()) %>€</td>
 							        <td><%= linea.getUnidades() %></td>
-							        <td><%= decimalFormat.format(linea.getTotal() * (1 + (linea.getImpuesto() / 100.0))) %>€</td>
+							        <td><%= decimalFormat.format(linea.getTotal()) %>€</td>
 							    </tr>
 							    <% } %>
 							</tbody>
