@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
 import conexion.Conexion;
 import model.VO.PedidoVO;
+import model.VO.ProductoMasVendidoDTO;
 import model.VO.ProductoVO;
 import model.VO.UsuarioVO;
 
@@ -339,5 +341,150 @@ public class PedidoDAO {
 
 	        return exito;
 	   }
+	   
+	   public static int obtenerPedidosEnviados() {
+	        Connection con = null;
+	        PreparedStatement ps = null;
+	        ResultSet rs = null;
+	        int cantidad = 0;
+	        
+	        try {
+	            con = Conexion.getConexion();
+	            ps = con.prepareStatement("SELECT COUNT(*) FROM pedidos WHERE estado = ?");
+	            ps.setString(1, "Enviado");
+
+	            rs = ps.executeQuery();
+
+	            if (rs.next()) {
+	            	cantidad = rs.getInt(1);
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }        
+
+	        return cantidad;
+	   }
+	   
+	   public static int obtenerPromedioPedido() {
+	        Connection con = null;
+	        PreparedStatement ps = null;
+	        ResultSet rs = null;
+	        int cantidad = 0;
+
+	        try {
+	            con = Conexion.getConexion();
+	            ps = con.prepareStatement("SELECT AVG(total) AS promedio_pedido FROM pedidos WHERE estado = ?");
+	            ps.setString(1, "Enviado");
+
+	            rs = ps.executeQuery();
+
+	            if (rs.next()) {
+	            	cantidad = rs.getInt(1);
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }        
+
+	        return cantidad;
+	   }
+	   
+	   public static int obtenerPedidosCancelados() {
+	        Connection con = null;
+	        PreparedStatement ps = null;
+	        ResultSet rs = null;
+	        int cantidad = 0;
+
+	        try {
+	            con = Conexion.getConexion();
+	            ps = con.prepareStatement("SELECT COUNT(*) FROM pedidos WHERE estado = ?");
+	            ps.setString(1, "Cancelado");
+
+	            rs = ps.executeQuery();
+
+	            if (rs.next()) {
+	            	cantidad = rs.getInt(1);
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }        
+
+	        return cantidad;
+	   }
+	   
+		public static List<Integer> obtenerCantidadPedidosUltimosMeses(){
+			
+			Connection con = null;
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			List<Integer> cantidadPedidos = new ArrayList<>();
+
+			try {
+			    con = Conexion.getConexion();
+			    ps = con.prepareStatement("SELECT COUNT(*) as cantidad_pedidos " +
+                        "FROM pedidos " +
+                        "WHERE fecha BETWEEN ? AND ? " +
+                        "GROUP BY YEAR(fecha), MONTH(fecha) " +
+                        "ORDER BY YEAR(fecha) DESC, MONTH(fecha) DESC " +
+                        "LIMIT 6");
+		           // Obtener la fecha actual y retroceder 6 meses
+	            Calendar cal = Calendar.getInstance();
+	            cal.add(Calendar.MONTH, -6);
+	            java.sql.Date fechaInicio = new java.sql.Date(cal.getTimeInMillis());
+	            java.sql.Date fechaFin = new java.sql.Date(System.currentTimeMillis());
+	            
+	            ps.setDate(1, fechaInicio);
+	            ps.setDate(2, fechaFin);
+	            
+
+			    rs = ps.executeQuery();
+			    while (rs.next()) {
+			        cantidadPedidos.add(rs.getInt("cantidad_pedidos"));			        
+			    }
+			} catch (SQLException e) {
+			    e.printStackTrace();
+			}
+
+			return cantidadPedidos;
+		}
+		
+		public static List<Integer> obtenerCantidadPedidosUltimosMesesPorEstado(String estado){
+		    Connection con = null;
+		    PreparedStatement ps = null;
+		    ResultSet rs = null;
+		    List<Integer> cantidadPedidos = new ArrayList<>();
+
+		    try {
+		        con = Conexion.getConexion();
+		        ps = con.prepareStatement("SELECT COUNT(*) as cantidad_pedidos " +
+		                "FROM pedidos " +
+		                "WHERE estado = ? AND fecha BETWEEN ? AND ? " +
+		                "GROUP BY YEAR(fecha), MONTH(fecha) " +
+		                "ORDER BY YEAR(fecha) DESC, MONTH(fecha) DESC " +
+		                "LIMIT 6");
+		        // Obtener la fecha actual y retroceder 6 meses
+		        Calendar cal = Calendar.getInstance();
+		        cal.add(Calendar.MONTH, -6);
+		        java.sql.Date fechaInicio = new java.sql.Date(cal.getTimeInMillis());
+		        java.sql.Date fechaFin = new java.sql.Date(System.currentTimeMillis());
+
+		        ps.setString(1, estado);
+		        ps.setDate(2, fechaInicio);
+		        ps.setDate(3, fechaFin);
+
+		        rs = ps.executeQuery();
+		        while (rs.next()) {
+		            cantidadPedidos.add(rs.getInt("cantidad_pedidos"));
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+
+		    return cantidadPedidos;
+		}
+
+	   
 
 }

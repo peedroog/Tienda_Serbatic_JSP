@@ -16,6 +16,7 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 
 import model.DAO.UsuarioDAO;
 import model.VO.UsuarioVO;
+import service.UsuarioService;
 /**
  * Servlet implementation class RegistrarServlet
  */
@@ -83,7 +84,8 @@ public class RegistrarUsuario extends HttpServlet {
 	    usuario.setClave(encriptar.encryptPassword(clave));
 	        if (UsuarioDAO.registrarUsuario(usuario)) {
 	            // El usuario se registró correctamente
-	            request.getSession().setAttribute("usuario", usuario);
+	            UsuarioVO user = UsuarioService.devuelveUsuario(email);
+	            request.getSession().setAttribute("usuario", user);
 	            response.sendRedirect(request.getContextPath());
 	        } else {
 	            // El correo electrónico ya está registrado, mostrar mensaje de error

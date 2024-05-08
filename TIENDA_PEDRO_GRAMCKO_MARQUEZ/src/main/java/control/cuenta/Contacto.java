@@ -60,7 +60,7 @@ public class Contacto extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		EnviarCorreo.enviarCorreoContacto();
-		
+		response.sendRedirect(request.getContextPath());
 	}
 
 }

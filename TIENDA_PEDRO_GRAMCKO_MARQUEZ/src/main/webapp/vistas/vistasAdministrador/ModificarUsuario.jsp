@@ -3,12 +3,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+            <link rel="icon" type="image/x-icon" href="ico/perro.png">
+        <title>HappyPets | Administración</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Administración</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="vistas/vistasAdministrador/indexEmpleado/css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -16,10 +17,10 @@
     </head>
     
 
-    <body class="sb-nav-fixed">
+     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand">
             <!-- Navbar Brand-->
-         <form action ="<%=request.getContextPath()%>/Admin" method="get">
+         <form action ="<%=request.getContextPath() %>/Admin" method="get">
             <button type="submit" style="background-color: #012d25; border: none;">
                 <jsp:include page="/svg/svgLogo.jsp"></jsp:include>
             </button>
@@ -41,6 +42,12 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    	<li>
+						    <form id="cambiarDatos" action="<%= request.getContextPath()%>/RellenarDatosUsuario" method="get">
+						        <input type="hidden" name="logout" value="true">
+						        <a class="dropdown-item" href="#" onclick="document.getElementById('cambiarDatos').submit();">Mis datos</a>
+						    </form>
+						</li>
                         <li>
 						    <form id="logoutForm" action="<%= request.getContextPath()%>/CerrarSesion" method="post">
 						        <input type="hidden" name="logout" value="true">
@@ -57,7 +64,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Inicio</div>
-                            <a class="nav-link" href="<%= request.getContextPath()%>/Admin">
+                            <a class="nav-link" href="<%=request.getContextPath()%>/Admin">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Estadísticas
                             </a>
@@ -100,22 +107,35 @@
 							        <a class="nav-link" href="<%= request.getContextPath()%>/ModificarCategoria">Actualizar</a>
 							    </nav>
 							</div>
+							
+														<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsProveedores" aria-expanded="false" aria-controls="collapseLayoutsProveedores">
+							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+							    Gestionar proveedores
+							    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+							</a>
+							<div class="collapse" id="collapseLayoutsProveedores" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							    <nav class="sb-sidenav-menu-nested nav">
+							        <a class="nav-link" href="<%= request.getContextPath()%>/AltaProveedor">Dar de alta</a>
+							        <a class="nav-link" href="<%= request.getContextPath()%>/ModificarProveedor">Actualizar</a>
+							    </nav>
+							</div>
 
 
 
                             
                             
-                                <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
+                            <div class="sb-sidenav-menu-heading">Envíos y cancelaciones</div>
                             <a class="nav-link" href="<%= request.getContextPath()%>/AdminEnviarPedido">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Procesar pedidos
                             </a>
                             
                             
-                            <div class="sb-sidenav-menu-heading">Empleados</div>
-                            <% UsuarioVO usuarioRol = (UsuarioVO) request.getSession().getAttribute("usuario");
-                    		if(usuarioRol.getId_rol() == 3){%>
+                            
+                            <% UsuarioVO usuario = (UsuarioVO) request.getSession().getAttribute("usuario");
+                    		if(usuario.getId_rol() == 3){%>
                     			       
+                    		<div class="sb-sidenav-menu-heading">Administrador</div>
 							<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayoutsEmpleados" aria-expanded="false" aria-controls="collapseLayoutsEmpleados">
 							    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
 							    Gestionar empleados
@@ -132,11 +152,11 @@
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Rol:</div>
-						  <p align="center" style="font-size: 20px; color: RED;">
-						    <% if(usuarioRol.getId_rol() == 2) { %>
+                        <div class="small">Permisos de:</div>
+						  <p align="center" style="font-size: 20px; color: RED; font-weight: bold;">
+						    <% if(usuario.getId_rol() == 2) { %>
 						        Empleado
-						    <% } else if (usuarioRol.getId_rol() == 3) { %>
+						    <% } else if (usuario.getId_rol() == 3) { %>
 						        Administrador
 						    <% } %>
 						</p>
@@ -164,7 +184,7 @@
                 <% 
             	UsuarioVO user = (UsuarioVO) request.getSession().getAttribute("usuario");
                 List<UsuarioVO> listaUsuarios = (List<UsuarioVO>) request.getAttribute("listaUsuarios"); 
-                for (UsuarioVO usuario: listaUsuarios) {      
+                for (UsuarioVO usuarios: listaUsuarios) {      
                 	
                     
                 	user = (UsuarioVO) request.getSession().getAttribute("usuario");
@@ -172,24 +192,24 @@
                     
                 %>
 				<tr>
-				    <td><%= usuario.getId() %></td>
-				    <td><%= usuario.getId_rol() %></td>
-				    <td><%= usuario.getEmail() %></td>
+				    <td><%= usuarios.getId() %></td>
+				    <td><%= usuarios.getId_rol() %></td>
+				    <td><%= usuarios.getEmail() %></td>
 				    <td>
 				        <% if(rolUsuario == 2 || rolUsuario == 3) { %>
 				            <a href="#" class="actualizar-usuario"
-				               data-id="<%= usuario.getId() %>"
-				               data-id_rol="<%= usuario.getId_rol() %>"
-				               data-email="<%= usuario.getEmail() %>"
-				               data-clave="<%= usuario.getClave() %>"
-				               data-nombre="<%= usuario.getNombre() %>"
-				               data-apellido1="<%= usuario.getApellido1() %>"
-				               data-apellido2="<%= usuario.getApellido2() %>"
-				               data-direccion="<%= usuario.getDireccion() %>"
-				               data-provincia="<%= usuario.getProvincia()%>"
-				               data-localidad="<%= usuario.getLocalidad() %>"
-				               data-telefono="<%= usuario.getTelefono()%>"
-				               data-dni="<%= usuario.getDni() %>"
+				               data-id="<%= usuarios.getId() %>"
+				               data-id_rol="<%= usuarios.getId_rol() %>"
+				               data-email="<%= usuarios.getEmail() %>"
+				               data-clave="<%= usuarios.getClave() %>"
+				               data-nombre="<%= usuarios.getNombre() %>"
+				               data-apellido1="<%= usuarios.getApellido1() %>"
+				               data-apellido2="<%= usuarios.getApellido2() %>"
+				               data-direccion="<%= usuarios.getDireccion() %>"
+				               data-provincia="<%= usuarios.getProvincia()%>"
+				               data-localidad="<%= usuarios.getLocalidad() %>"
+				               data-telefono="<%= usuarios.getTelefono()%>"
+				               data-dni="<%= usuarios.getDni() %>"
 				               data-activo="<%= usuario.isActivo() %>">Actualizar</a>
 				               			               
 				        <% } %>
@@ -272,7 +292,7 @@
         
         <%
         // Aquí se comprueba el rol del usuario
-        int rolUsuario = usuarioRol.getId_rol();
+        int rolUsuario = user.getId_rol();
         if(rolUsuario == 3){ %>
             <div style="margin-bottom: 10px;">
             <label for="activo">Activo:</label>

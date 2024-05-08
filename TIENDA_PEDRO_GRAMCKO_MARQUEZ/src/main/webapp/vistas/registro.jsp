@@ -4,7 +4,7 @@
 <head>
 <link rel="icon" type="image/x-icon" href="ico/perro.png">
     <meta charset="UTF-8">
-    <title>HappyPets</title>
+    <title>HappyPets | Registro</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>

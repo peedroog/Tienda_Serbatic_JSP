@@ -118,6 +118,23 @@
     }
 </script>
 
+    <script>
+        // Función para obtener parámetros de la URL
+        function obtenerParametro(nombre) {
+            nombre = nombre.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + nombre + "=([^&#]*)");
+            var resultados = regex.exec(location.search);
+            return resultados === null ? "" : decodeURIComponent(resultados[1].replace(/\+/g, " "));
+        }
+        
+        // Verificar si el parámetro "mostrarMensaje" está presente en la URL
+        var cambiarPassword = obtenerParametro("cambiarPassword");
+        if (cambiarPassword === "true") {
+            // Mostrar el mensaje usando un cuadro de diálogo de alerta
+            alert("Debes cambiar tu contraseña");
+        }
+    </script>
+
 </body>
 <footer>
     <jsp:include page="/vistas/footer/footer.jsp"/>

@@ -59,8 +59,7 @@ public class ModificarUsuario extends HttpServlet {
 	    String localidad = request.getParameter("localidad");
 	    String telefono = request.getParameter("telefono");
 	    String dni = request.getParameter("dni");
-	    boolean activo = Boolean.parseBoolean(request.getParameter("activo"));
-
+	    boolean activo = request.getParameter("activo") != null;
 	    // Crear un objeto UsuarioVO con los datos obtenidos
 	    UsuarioVO usuario = new UsuarioVO();
 	    usuario.setId(id);

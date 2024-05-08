@@ -104,7 +104,7 @@
 					    <% if (pedido.getNum_factura() == null || pedido.getNum_factura().isEmpty()) { %>
 					        No disponible
 					    <% } else { %>
-					        <%= pedido.getNum_factura() %>
+					        <a href="<%=request.getContextPath() %>/Facturas/factura<%= pedido.getNum_factura() %>.pdf"><%= pedido.getNum_factura() %></a>
 					    <% } %>
 					</td>
                     <td>

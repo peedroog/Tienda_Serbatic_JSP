@@ -63,7 +63,7 @@ public class CategoriasProducto extends HttpServlet {
 				id_cat = 1;
 			} else if (categoriaSeleccionada.equals("Gatos")) {
 				id_cat = 2;
-			} else if (categoriaSeleccionada.equals("Otros animales")) {
+			} else if (categoriaSeleccionada.equals("Otros")) {
 				id_cat = 3;
 			}
 

@@ -86,10 +86,6 @@
 
 
 
-
-
-
-
 .product-card{
 	display: flex;
 	justify-content: flex-end;
@@ -98,7 +94,7 @@
 	margin-bottom: 25px;
 	height: 384px;
 	border-radius: 20px;
-	background-size: contain !important;
+	background-size: cover !important;
 	-webkit-box-shadow: 3px 7px 31px -10px rgba(0,0,0,0.47);
 	-moz-box-shadow: 3px 7px 31px -10px rgba(0,0,0,0.47);
 	box-shadow: 3px 7px 31px -10px rgba(0,0,0,0.47);
@@ -240,4 +236,48 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#007c5e', end
 .btn-filtro:hover{
 	border: 0px !important;
 	color: black !important;
+}
+/*------------------------------------------*/
+
+
+
+
+
+
+
+/*------------------------------------------*/
+.nav-categorias{
+	margin: 75px auto !important;
+	margin-bottom: 60px !important;
+    width: 70%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+
+}
+
+.nav-categorias a{
+	color: gray;
+	font-size: 25px;
+	border-bottom: 1px solid lightgray !important;
+	height: 60px;
+	width: 250px;
+}
+
+.nav-categorias a:hover{
+	color: #84f5c6 !important;
+	border-bottom: 2px solid #0abf8a !important;
+}
+
+.nav-link:hover{
+	color: #009f73 !important;
+}
+
+.nav-link{
+	color: #009f73 !important;
+}
+
+.nav-categorias img{
+	width: 40px;
+
 }

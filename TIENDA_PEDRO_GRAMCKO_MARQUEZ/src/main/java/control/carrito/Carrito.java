@@ -70,7 +70,7 @@ public class Carrito extends HttpServlet {
 	    request.setAttribute("languaje", lang);
 	    request.setAttribute("idiomas", idiomas);
 
-	    if (!"/RellenarDatosUsuario".equals(request.getServletPath())) {
+	    if (!"/RellenarDatosUsuario".equals(request.getServletPath()+"?")) {
 	        request.getSession().setAttribute("ultimaRuta", request.getRequestURI() + "?" + request.getQueryString());
 	    }
 

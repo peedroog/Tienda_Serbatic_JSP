@@ -45,7 +45,6 @@ public class ActualizarCantidad extends HttpServlet {
         // Actualizar la cantidad del producto en el carrito
         if (producto != null) {
             carrito.put(producto, nuevaCantidad);
-            System.out.println("Cantidad del producto actualizada en el carrito: " + producto.getId() + ", nueva cantidad: " + nuevaCantidad);
         } else {
             // Manejar error si no se encuentra el producto en la base de datos
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "El producto no está en la base de datos");

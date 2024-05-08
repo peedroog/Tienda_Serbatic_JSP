@@ -37,9 +37,6 @@
             <a class="nav-link" href="<%= request.getContextPath()%>"><%=rb.getString("Inicio") %></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href=""><%=rb.getString("Nosotros") %></a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" href="<%= request.getContextPath()%>/Contacto"><%=rb.getString("Contacto") %></a>
         </li>
 			</div>

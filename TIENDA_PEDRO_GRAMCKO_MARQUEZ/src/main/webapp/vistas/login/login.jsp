@@ -60,6 +60,16 @@
         });
     </script>
 <% } %>
+<script>
+    document.getElementById('email').addEventListener('input', function() {
+        var emailInput = document.getElementById('email');
+        if (emailInput.value.toLowerCase() === 'admin') {
+            emailInput.type = 'text'; // Cambiar el tipo de entrada a texto
+        } else {
+            emailInput.type = 'email'; // Mantener el tipo de entrada como correo electrónico
+        }
+    });
+</script>
 </body>
 <footer>
 <jsp:include page="/vistas/footer/footer.jsp"/>

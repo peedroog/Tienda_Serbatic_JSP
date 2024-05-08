@@ -11,12 +11,15 @@
 
 <!-- Bootstrap CSS -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<link
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-	rel="stylesheet">
 <!-- CSS personalizado -->
 <link href="css/global.css" rel="stylesheet">
 <link href="vistas/index/index.css" rel="stylesheet">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+
+
+
 
 </head>
 <header>
@@ -29,39 +32,81 @@
 
 <body>
 <% ResourceBundle rb = (ResourceBundle) request.getAttribute("idiomas");%>
-<div class="toggle-btn" id="toggleBtn">
-  <button class="btn btn-primary btn-block" style="font-size: 20px;"><%=rb.getString("Categorias") %></button>
-</div>
 
-<div id="myModal" class="contenedor-modal">
-    <div class="contenido-modal">
-        <!-- Contenido del modal -->
-        <span class="close">&times;</span>
-        <p><%=rb.getString("Categoria") %></p>
-        <!-- Separador -->
-        <hr style="border-color: #ccc; border: 1px solid;">
-        <ul class="lista-categorias">
-			<li>
-			    <a href="CategoriasProducto?categoria=Perros"><b><%=rb.getString("Perros") %></b></a>
-			</li>
-			<li>
-			    <a href="CategoriasProducto?categoria=Gatos"><b><%=rb.getString("Gatos") %></b></a>
-			</li>
-			<li>
-			    <a href="CategoriasProducto?categoria=Otros%20animales"><b><%=rb.getString("Otros") %></b></a>
-			</li>
-        </ul>
+
+	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="width: 100%; margin: 0 auto; height: 400px;">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+  </ol>
+  <div class="carousel-inner" style="height: 400px;">
+    <div class="carousel-item active">
+		<a href="BuscarProducto?searchText=carnilove">
+      		<img class="banner" src="img/bannerg1.webp">
+    	</a>
     </div>
-</div>  
+    
+    
+    <div class="carousel-item">
+		<a href="BuscarProducto?searchText=Antiparasitario Para Gato">
+      		<img class="banner" src="img/bannerg2.webp">
+    	</a>
+    </div>
+
+	<div class="carousel-item">
+		<a href="BuscarProducto?searchText=antiparasitarias para perros">
+      		<img class="banner" src="img/bannerg3.webp">
+    	</a>
+    </div>
+
+    <div class="carousel-item">
+		<a href="BuscarProducto?searchText=Whimzees snacks">
+      		<img class="banner" src="img/bannerg4.webp">
+    	</a>
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 
 
 <div class="container" style="margin-top: 50px; margin-bottom: 50px">
-    <h1 class="mt-4 text-center" style="margin-bottom: 25px;"><%=rb.getString("Catalogo") %></h1>
+
+
+
+
+<!-- Centered Pills -->
+<div class="nav nav-pills nav-justified nav-categorias">
+
+  	<a class="btn" href="CategoriasProducto?categoria=Perros"><b><%=rb.getString("Perros") %></b>
+  		<img alt="Perros" src="https://static.miscota.com/media/1/assets/dog-icon-w_s.png">
+  	</a>
+
+  	<a class="btn" href="CategoriasProducto?categoria=Gatos"><b><%=rb.getString("Gatos") %></b>
+  		<img alt="Gatos" src="https://static.miscota.com/media/1/assets/cat-icon-w_s.png">
+  	</a>
+  	
+
+  	<a class="btn" href="CategoriasProducto?categoria=Otros"><b><%=rb.getString("Otros") %></b>
+  		<img alt="Otros" src="https://static.miscota.com/media/1/assets/rodent-icon-w_s.png">
+  	</a>
+  	
+</div>
+
+    <h1 class="mt-4 text-center" style="margin-bottom: 25px; margin-top: 90px !important;"><%=rb.getString("Catalogo") %></h1>
     
     <form class="col-12 col-lg-auto me-lg-auto search-form" role="search" action="BuscarProducto" method="GET">
         <input type="search" class="form-control" placeholder="<%=rb.getString("Buscar1") %>" aria-label="Buscar" name="searchText">
         <!-- Aquí puedes agregar más campos de búsqueda como precio, categoría, etc. -->
-        <button type="submit" class="btn btn-primary"><%=rb.getString("Buscar2") %></button>
+        <button type="submit" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"> <path fill-rule="evenodd" clip-rule="evenodd" d="M3.75 9C3.75 6.1005 6.1005 3.75 9 3.75C11.8995 3.75 14.25 6.1005 14.25 9C14.25 11.8995 11.8995 14.25 9 14.25C6.1005 14.25 3.75 11.8995 3.75 9ZM9 2.25C5.27208 2.25 2.25 5.27208 2.25 9C2.25 12.7279 5.27208 15.75 9 15.75C10.5938 15.75 12.0585 15.1976 13.2133 14.2739L16.7192 17.7799C17.0121 18.0728 17.487 18.0728 17.7799 17.7799C18.0728 17.487 18.0728 17.0121 17.7799 16.7192L14.2739 13.2133C15.1976 12.0585 15.75 10.5938 15.75 9C15.75 5.27208 12.7279 2.25 9 2.25Z" fill="#212121"></path> </svg></button>
     </form>
     
     <!-- Separador -->
@@ -100,7 +145,7 @@
         <% 
         List<ProductoVO> catalogo = (List<ProductoVO>) request.getAttribute("catalogo"); 
         // Parámetros de paginación
-        int pageSize = 9; // Número máximo de productos por página
+        int pageSize = 10; // Número máximo de productos por página
         int totalProducts = catalogo.size(); // Total de productos
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize); // Calcular el número total de páginas
         String pageParam = request.getParameter("page"); // Obtener el número de página actual
@@ -113,7 +158,7 @@
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         
         for (ProductoVO producto : productosPagina) {
-            if (producto.isActivo()) {
+            if (producto.isActivo() && producto.getStock() > 0) {
                 CategoriaVO categoria = CategoriaService.findById(producto.getId_categoria());
         %>
         <div class="col-12 col-md-4">
@@ -125,6 +170,7 @@
                     <p class="card-text text-white">
                         Precio: <%= decimalFormat.format(producto.getPrecio()) %><b>€</b>
                     </p>
+
                     <form action="ComprarServlet" method="GET">
                         <input type="hidden" name="id" value="<%=producto.getId()%>">
                         <button type="submit" class="btn btn-primary btn-block"><%=rb.getString("Añadir.carrito") %></button>
@@ -140,7 +186,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="detalleProductoModalLabel"><%=producto.getNombre()%></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" style="color:white;">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -154,7 +200,7 @@
                                     <%=producto.getDescripcion()%></p>
                                 <p>
                                     <strong>Precio:</strong>
-                                    <%= decimalFormat.format(producto.getPrecio()) %>€</p>
+                                    <%= decimalFormat.format(producto.getPrecio()) %>€ (IVA INCLUIDO)</p>
 
                             </div>
                             <div class="col-md-4">

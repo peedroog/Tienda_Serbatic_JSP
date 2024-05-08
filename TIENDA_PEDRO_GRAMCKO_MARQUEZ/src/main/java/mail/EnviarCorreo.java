@@ -14,7 +14,7 @@ import model.VO.UsuarioVO;
 public class EnviarCorreo {
 
 	public static void enviarCorreoContacto() {
-        String destinatario = "happypets_tienda@outlook.com\"";
+        String destinatario = "pedrodavid0601@gmail.com";
 
         try {
             // Propiedades de la conexión
@@ -41,23 +41,23 @@ public class EnviarCorreo {
             MimeMessage mensaje = new MimeMessage(sesion);
 
             // Indicamos la cuenta desde la que se va a enviar
-            mensaje.setFrom(new InternetAddress("happypets_tienda@outlook.com\""));
+            mensaje.setFrom(new InternetAddress("happypets_tienda@outlook.com"));
 
             // Añadimos el recipiente al mensaje al que va a ir dirigido el mensaje
             mensaje.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
 
             // TODO
             // Creamos el asunto del mensaje
-            mensaje.setSubject("Ejemplo con JavaMail");
+            mensaje.setSubject("Nueva solicitud de contacto");
 
             // TODO
             // Creamos el cuerpo del mensaje
-            mensaje.setText("Esto es una prueba con JavaMail");
+            mensaje.setText("Solicitud de contacto recibida. Datos del cliente:\n\n\n");
 
             // Utilizamos un objeto transport para hacer el envío indicando el protocolo
             Transport t = sesion.getTransport("smtp");
             // Hacemos la conexión
-            t.connect("happypets_tienda@outlook.com\"", "27307537p");
+            t.connect("happypets_tienda@outlook.com", "27307537p");
             // Enviamos el mensaje
             t.sendMessage(mensaje, mensaje.getAllRecipients());
 

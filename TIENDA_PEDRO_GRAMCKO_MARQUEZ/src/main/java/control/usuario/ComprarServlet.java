@@ -62,16 +62,13 @@ public class ComprarServlet extends HttpServlet {
 				 // Verificar si el producto ya está en el carrito
                 if (carrito.containsKey(producto)) {
                     carrito.put(producto, carrito.get(producto) + 1); // Incrementar la cantidad
-                    System.out.println("Cantidad del producto actualizada en el carrito: " + id);
+
                 } else {
                     carrito.put(producto, 1); // Añadir el producto al carrito con cantidad 1
-                    System.out.println("Producto añadido al carrito: " + id + " cantidad: 1");
+
                 }
 
-                // Imprimir el contenido del carrito (solo para propósitos de prueba)
-                for (Map.Entry<ProductoVO, Integer> entry : carrito.entrySet()) {
-                    System.out.println("ID del producto: " + entry.getKey().getId() + ", Cantidad: " + entry.getValue());
-                }
+
             } else {
                 // Manejar error si no se proporciona ID
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID del producto no proporcionado");

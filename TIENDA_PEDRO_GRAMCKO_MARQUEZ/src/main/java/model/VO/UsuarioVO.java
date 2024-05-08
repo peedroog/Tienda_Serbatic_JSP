@@ -20,4 +20,5 @@ public class UsuarioVO {
 	String telefono;
 	String dni;
 	boolean activo;
+	boolean passCambiada;
 }

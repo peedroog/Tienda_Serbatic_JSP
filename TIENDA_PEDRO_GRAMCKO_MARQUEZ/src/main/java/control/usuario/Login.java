@@ -1,6 +1,7 @@
 package control.usuario;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -86,17 +87,12 @@ public class Login extends HttpServlet {
 
 
 		    UsuarioVO usuario = UsuarioService.iniciarSesion(email, clave);
-		    if (usuario != null && encriptar.checkPassword(clave, usuario.getClave())) {
+		    if (usuario != null && encriptar.checkPassword(clave, usuario.getClave()) && usuario.isActivo()) {
 		        // Verificar si el usuario no es nulo primero antes de verificar la contraseña
 		        request.getSession().setAttribute("usuario", usuario);
 		        
 
-		        
-		        // Iniciar el hilo si la sesión es nula
-		        if (!EnviarPedidos.isRunning()) {
-		            EnviarPedidos.startThread();
-		        }
-		        
+		       
 		        // Verificar el id_rol del usuario y redirigir según su rol
 		        switch (usuario.getId_rol()) {
 		            case 1:
@@ -118,8 +114,12 @@ public class Login extends HttpServlet {
 		                break;
 		            case 3:
 		                // Redirigir al usuario con rol 3 a una página específica
-		                response.sendRedirect(request.getContextPath() + "/Admin");
-		                break;
+
+			                response.sendRedirect(request.getContextPath() + "/Admin");
+		            	
+		            	
+		            	break;
+
 		            default:
 		                // Redirigir al usuario a una página por defecto en caso de que su rol no esté definido
 		                response.sendRedirect(request.getContextPath());
@@ -127,12 +127,11 @@ public class Login extends HttpServlet {
 		        }
 		    } else {
 		        
-		        if (EnviarPedidos.isRunning()) {
-		            EnviarPedidos.stopThread();
-		        }
+
 		        request.setAttribute("errorInicioSesion", "El usuario o la contraseña son incorrectos");
 		        request.getRequestDispatcher("/vistas/login/login.jsp").forward(request, response);
 		    }
+		    
 		}
 
 

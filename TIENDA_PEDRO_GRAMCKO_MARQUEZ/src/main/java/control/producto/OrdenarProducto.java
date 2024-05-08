@@ -65,9 +65,7 @@ public class OrdenarProducto extends HttpServlet {
                 	request.setAttribute("listaFiltro", ProductoService.filtrarPrecioDesc());
                     break;
                 case "masComprados":
-                    // Implementa la lógica para ordenar por productos más comprados
-                    // Puedes llamar a un método en ProductoService que devuelva una lista de productos ordenados por los más comprados
-                    // Ejemplo: productos = ProductoService.findMostPurchased();
+                	request.setAttribute("listaFiltro", ProductoService.filtrarPorMasComprados());
                     break;
                 case "mejorValorados":
                     // Implementa la lógica para ordenar por productos mejor valorados

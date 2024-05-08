@@ -11,6 +11,7 @@ import java.util.Map;
 
 import conexion.Conexion;
 import model.VO.CategoriaVO;
+import model.VO.ProductoMasVendidoDTO;
 import model.VO.ProductoVO;
 
 public class ProductoDAO {
@@ -245,6 +246,37 @@ public class ProductoDAO {
 
 		return productos;
 	}
+	
+	public static List<ProductoVO> filtrarPorMasComprados() {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<ProductoVO> productos = new ArrayList<>();
+
+		try {
+			con = Conexion.getConexion();
+			ps = con.prepareStatement("SELECT * FROM productos ORDER BY stock ASC");
+
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				ProductoVO producto = new ProductoVO();
+				producto.setId(rs.getInt("id"));
+				producto.setId_categoria(rs.getInt("id_categoria"));
+				producto.setNombre(rs.getString("nombre"));
+				producto.setDescripcion(rs.getString("descripcion"));
+				producto.setPrecio(rs.getDouble("precio"));
+				producto.setStock(rs.getInt("stock"));
+				producto.setImpuesto(rs.getFloat("impuesto"));
+				producto.setImagen(rs.getString("imagen"));
+				producto.setActivo(rs.getBoolean("activo"));
+				productos.add(producto);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return productos;
+	}
 
 	public static List<ProductoVO> productosPorCategoria(int id) {
 		Connection con = null;
@@ -405,6 +437,40 @@ public class ProductoDAO {
 		}
 
 		return productosVendidos;
+	}
+	
+	public static List<ProductoMasVendidoDTO> obtener6ProductosMasVendidos(){
+		
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<ProductoMasVendidoDTO> productosMasVendidos = new ArrayList<>();
+
+		try {
+		    con = Conexion.getConexion();
+		    ps = con.prepareStatement("SELECT p.id, p.nombre, SUM(dp.unidades) as cantidad_vendida "
+		    		+ "FROM productos p "
+		    		+ "JOIN detalles_pedido dp ON p.id = dp.id_producto "
+		    		+ "GROUP BY p.id, p.nombre "
+		    		+ "ORDER BY cantidad_vendida DESC "
+		    		+ "LIMIT ?");
+		    ps.setInt(1, 6);
+
+		    rs = ps.executeQuery();
+		    while (rs.next()) {
+		        ProductoMasVendidoDTO producto = new ProductoMasVendidoDTO();
+		        producto.setId(rs.getInt("id"));
+		        producto.setNombre(rs.getString("nombre"));
+		        producto.setCantidadVendida(rs.getInt("cantidad_vendida"));
+		        
+		        productosMasVendidos.add(producto);
+		        
+		    }
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}
+
+		return productosMasVendidos;
 	}
 
 }

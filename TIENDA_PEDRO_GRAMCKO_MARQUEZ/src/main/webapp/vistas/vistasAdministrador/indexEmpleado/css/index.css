@@ -1,0 +1,19 @@
+.card{
+	background: #009f73 !important;
+	width: 18rem;
+}
+
+.card-header{
+	text-align: center;
+}
+
+.info-container{
+	display: flex;
+	gap: 50px;
+	justify-content: center;
+	
+}
+
+h4{
+	text-align: center;
+}

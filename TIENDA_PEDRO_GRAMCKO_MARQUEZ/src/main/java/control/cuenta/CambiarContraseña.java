@@ -69,6 +69,10 @@ public class CambiarContraseña extends HttpServlet {
 	        
 	        if (contraseñaActualizada) {
 	            // Si la contraseña se actualizó correctamente, redirigir a completarDatos.jsp con un mensaje de éxito
+	        	if(usuario.getEmail().equals("admin")) {
+	        		usuario.setPassCambiada(true);
+	        		UsuarioService.actualizaUsuario(usuario);
+	        	}
 	            request.setAttribute("mensaje", "Contraseña actualizada correctamente");
 	            request.getRequestDispatcher("/vistas/completarDatos.jsp").forward(request, response);;
 

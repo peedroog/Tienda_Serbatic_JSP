@@ -43,9 +43,8 @@ public class PedidoService {
 	}
 	
 	public static boolean enviarPedidoAdmin(PedidoVO pedido, UsuarioVO usuario) {
-//		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
-		CrearFactura.generarFactura(pedido, usuario);
-		return PedidoDAO.enviarPedidoAdmin(pedido.getId());
+		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
+		return PedidoDAO.enviarPedidoAdmin(pedido.getId());		
 	}
 	
 	public static boolean cancelarPedidoAdmin(int id) {
@@ -53,9 +52,19 @@ public class PedidoService {
 	}
 	
 	public static boolean enviarPedidoHilo(PedidoVO pedido, UsuarioVO usuario) {
-//		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);
-		CrearFactura.generarFactura(pedido, usuario);
+		EnviarCorreo.enviarPedidoConfirmado(pedido, usuario);		
 		return PedidoDAO.enviarPedidoHilo(pedido.getId());
 	}
 	
+	public static List<Integer> obtenerCantidadPedidosUltimosMeses(){
+		return PedidoDAO.obtenerCantidadPedidosUltimosMeses();
+	}
+	
+	public static List<Integer> obtenerCantidadPedidosEnviadosUltimosMeses(){
+	    return PedidoDAO.obtenerCantidadPedidosUltimosMesesPorEstado("Enviado");
+	}
+
+	public static List<Integer> obtenerCantidadPedidosCanceladosUltimosMeses(){
+	    return PedidoDAO.obtenerCantidadPedidosUltimosMesesPorEstado("Cancelado");
+	}
 }

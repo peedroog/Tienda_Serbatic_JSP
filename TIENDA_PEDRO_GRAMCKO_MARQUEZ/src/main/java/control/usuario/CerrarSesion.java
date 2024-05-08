@@ -45,9 +45,7 @@ public class CerrarSesion extends HttpServlet {
         	request.getSession().invalidate();
 
         }
-        if (EnviarPedidos.isRunning()) {
-            EnviarPedidos.stopThread();
-        }
+
         // Redirigimos al usuario a la página de inicio o a donde prefieras
         response.sendRedirect(request.getContextPath());
 	}

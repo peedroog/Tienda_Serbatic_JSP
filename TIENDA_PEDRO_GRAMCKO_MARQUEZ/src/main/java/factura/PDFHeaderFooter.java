@@ -23,27 +23,18 @@ public class PDFHeaderFooter extends PdfPageEventHelper {
     	try {
             PdfContentByte cb = writer.getDirectContent();
             
-            // Agregar imagen de cabecera
-            imagen = Image.getInstance("img/HapyyPets.png");
-            imagen.scaleToFit(100, 100); // Ajustar tamaño de la imagen
-            imagen.setAlignment(Element.ALIGN_CENTER);
-            document.add(imagen);
+
             
-            // Agregar título de la factura
-            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA, 16, Font.BOLD);
-            Font fontFactura = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL);
-            Paragraph titulo = new Paragraph("FACTURA", fontTitulo);
-            titulo.setAlignment(Element.ALIGN_CENTER);
-            Paragraph num_factura = new Paragraph(pedido.getNum_factura(), fontFactura);
-            document.add(titulo);
-            document.add(num_factura);
+//            // Agregar título de la factura
+//            Font fontTitulo = FontFactory.getFont(FontFactory.HELVETICA, 16, Font.BOLD);
+//            Font fontFactura = FontFactory.getFont(FontFactory.HELVETICA, 10, Font.NORMAL);
+//            Paragraph titulo = new Paragraph("FACTURA", fontTitulo);
+//            titulo.setAlignment(Element.ALIGN_CENTER);
+//            Paragraph num_factura = new Paragraph(pedido.getNum_factura(), fontFactura);
+//            document.add(titulo);
+//            document.add(num_factura);
             
-            // Agregar fecha de emisión
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Font fontFecha = FontFactory.getFont(FontFactory.HELVETICA, 12);
-            Paragraph fecha = new Paragraph(sdf.format(pedido.getFecha()), fontFecha);
-            fecha.setAlignment(Element.ALIGN_RIGHT);
-            document.add(fecha);
+
             
             // Línea separadora
             linea = new LineSeparator();

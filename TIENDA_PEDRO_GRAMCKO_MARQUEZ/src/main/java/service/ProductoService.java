@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import model.DAO.ProductoDAO;
 import model.VO.CategoriaVO;
+import model.VO.ProductoMasVendidoDTO;
 import model.VO.ProductoVO;
 
 public class ProductoService {
@@ -57,6 +58,10 @@ public class ProductoService {
 		return ProductoDAO.filtrarPrecioDesc();
 	}
 	
+	public static List<ProductoVO> filtrarPorMasComprados(){
+		return ProductoDAO.filtrarPorMasComprados();
+	}
+	
 	public static List<ProductoVO> productosPorCategoria(int id){
 		return ProductoDAO.productosPorCategoria(id);
 	}
@@ -75,5 +80,9 @@ public class ProductoService {
 	
 	public static Map<Integer, Integer> obtenerProductosVendidos(){
 		return ProductoDAO.obtenerProductosVendidos();
+	}
+	
+	public static List<ProductoMasVendidoDTO> obtener6ProductosMasVendidos(){
+		return ProductoDAO.obtener6ProductosMasVendidos();
 	}
 }

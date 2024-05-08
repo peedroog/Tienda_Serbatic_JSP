@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import factura.CrearFactura;
 import model.VO.DetallePedidoVO;
 import model.VO.PedidoVO;
 import model.VO.ProductoVO;
@@ -91,6 +92,9 @@ public class AdminEnviarPedido extends HttpServlet {
 	        if (enviado) {
 	            // Si se envió correctamente, establecer éxito en verdadero
 	            exito = true;
+	            pedido = PedidoService.devuelvePedido(pedidoId);
+	            String ruta = request.getServletContext().getRealPath("");
+	    		CrearFactura.generarFactura(pedido, usuario, ruta);
 	        }
 	    }
 		

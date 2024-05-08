@@ -58,6 +58,7 @@ public class ModificarEmpleado extends HttpServlet {
 	    String telefono = request.getParameter("telefono");
 	    String dni = request.getParameter("dni");
 	    boolean activo = Boolean.parseBoolean(request.getParameter("activo"));
+	    boolean passCambiada = Boolean.parseBoolean(request.getParameter("passCambiada"));
 
 	    // Crear un objeto UsuarioVO con los datos obtenidos
 	    UsuarioVO usuario = new UsuarioVO();
@@ -73,6 +74,7 @@ public class ModificarEmpleado extends HttpServlet {
 	    usuario.setTelefono(telefono);
 	    usuario.setDni(dni);
 	    usuario.setActivo(activo);
+	    usuario.setPassCambiada(passCambiada);
 	    
 	    String clave =((String) request.getParameter("clave"));
 	    StrongPasswordEncryptor encriptar = new StrongPasswordEncryptor();

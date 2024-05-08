@@ -233,6 +233,7 @@ public class UsuarioDAO {
 				usuario.setLocalidad(rs.getString("localidad"));
 				usuario.setTelefono(rs.getString("telefono"));
 				usuario.setDni(rs.getString("dni"));
+				usuario.setActivo(rs.getBoolean("activo"));
 
 			}
 		} catch (SQLException e) {
@@ -392,4 +393,29 @@ public class UsuarioDAO {
 
 		return exito;
 	}
+	
+	   public static int obtenerCantidadUsuarios() {
+	        Connection con = null;
+	        PreparedStatement ps = null;
+	        ResultSet rs = null;
+	        int cantidad = 0;
+	        
+	        try {
+	            con = Conexion.getConexion();
+	            ps = con.prepareStatement("SELECT COUNT(*) FROM usuarios WHERE id_rol = ?");
+	            ps.setInt(1, 1);
+
+	            rs = ps.executeQuery();
+
+	            if (rs.next()) {
+	            	cantidad = rs.getInt(1);
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }        
+
+	        return cantidad;
+	   }
+	   
 }
