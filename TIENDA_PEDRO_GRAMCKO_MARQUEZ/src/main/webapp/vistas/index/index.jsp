@@ -131,11 +131,11 @@
             <button type="submit" class="btn-filtro"><%=rb.getString("Mas.comprados") %></button>
         </form>
 
-        <!-- Botón para ordenar por Mejor valorados -->
+<%--         <!-- Botón para ordenar por Mejor valorados -->
         <form action="OrdenarProducto" method="GET" class="d-inline-block mx-2">
             <input type="hidden" name="orderBy" value="mejorValorados">
             <button type="submit" class="btn-filtro"><%=rb.getString("Mejor.valorados") %></button>
-        </form>
+        </form> --%>
     </div>
     
     <!-- Separador -->
