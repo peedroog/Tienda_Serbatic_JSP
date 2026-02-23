@@ -35,6 +35,7 @@ public class ActualizarCantidad extends HttpServlet {
         // Obtener los parámetros del formulario
         int productId = Integer.parseInt(request.getParameter("productId"));
         int nuevaCantidad = Integer.parseInt(request.getParameter("cantidad"));
+        int nuevaCantidad2 = Integer.parseInt(request.getParameter("cantidad"));
 
         // Obtener el carrito de la sesión
         Map<ProductoVO, Integer> carrito = (Map<ProductoVO, Integer>) request.getSession().getAttribute("carrito");
